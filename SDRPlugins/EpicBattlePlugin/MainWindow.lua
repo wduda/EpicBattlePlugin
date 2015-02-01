@@ -9,6 +9,48 @@ function round(num, idp)
   return math.floor(num * mult + 0.5) / mult;
 end
 
+-- Hungarian specials to UTF8 code
+function toUTF8(original)	
+	if original ~= nil then
+		text = original;
+		if string.len(text) > 0 then
+			text = string.gsub(text,"á","\195\161");
+			text = string.gsub(text,"é","\195\169");
+			text = string.gsub(text,"û","\197\177");
+			text = string.gsub(text,"õ","\197\145");
+			text = string.gsub(text,"ú","\195\186");
+			text = string.gsub(text,"ö","\195\182");
+			text = string.gsub(text,"ü","\195\188");
+			text = string.gsub(text,"ó","\195\179");
+			text = string.gsub(text,"í","\195\173");
+			text = string.gsub(text,"Á","\195\129");
+			text = string.gsub(text,"É","\195\137");
+			text = string.gsub(text,"Û","\197\176");
+			text = string.gsub(text,"Õ","\197\144");
+			text = string.gsub(text,"Ú","\195\154");
+			text = string.gsub(text,"Ö","\195\150");
+			text = string.gsub(text,"Ü","\195\156");
+			text = string.gsub(text,"Ó","\195\147");
+			text = string.gsub(text,"Í","\195\141");				
+		end
+	else
+		text = "";		
+	end
+	return text;
+end
+
+function clearPattern(original)
+	if original ~= nil then
+		text = original;
+		if string.len(text) > 0 then
+			text = string.gsub(text,"%%","");		
+		end;
+	else
+		text = "";		
+	end
+	return text;
+end
+
 function styleLabel(lbl, x, y, w, h, font, color, align, text)
 	lbl:SetPosition(x,y);
 	lbl:SetSize(w,h);
@@ -83,6 +125,11 @@ function saveState()
 	obj.minAfterBattle = OptionWindow.minAfterBattleToggle:IsChecked();
 	obj.maxForBattle = OptionWindow.maxForBattleToggle:IsChecked();
 	obj.additionalSaves = OptionWindow.saveCallsToggle:IsChecked();
+	obj.menuChat = ChatData.chat;
+	obj.menuWave = ChatData.wave;
+	obj.menuDetail = ChatData.detail;
+	obj.menuLanguage = ChatData.language;
+	
 	if pastEpicBattles ~= nil and debuggingMode then
 		Turbine.PluginData.Save(Turbine.DataScope.Account, "EBPData", pastEpicBattles, nil);
 	end
@@ -107,6 +154,19 @@ function loadState()
 			if persist ~= nil then
 				-- set required variables here
 
+				if persist.menuChat ~= nil then ChatData.chat = persist.menuChat; end
+				if persist.menuWave ~= nil then ChatData.wave = persist.menuWave; end
+				if persist.menuDetail ~= nil then ChatData.detail = persist.menuDetail; end
+				if persist.menuLanguage ~= nil then ChatData.language = persist.menuLanguage; end
+								
+				if ChatData.language == "hu" then
+					import "SDRPlugins.EpicBattlePlugin.Language_ext_hu";
+				else
+					import "SDRPlugins.EpicBattlePlugin.Language_ext_en";
+				end
+				
+				SetChatMessage();
+				
 				-- set window position
 				persist.window_x = euroNormalize(persist.window_x) or 150;
 				persist.window_y = euroNormalize(persist.window_y) or 150;
@@ -158,16 +218,19 @@ function scaleMainWindow(scale)
 	scale = scale / 100;
 
 	-- scale each element (other than the minimize button)
-	main_window:SetSize(450*scale,135*scale);
+	main_window:SetSize(450*scale,155*scale);
 	epicBattleLabel:SetSize(450*scale, 20*scale);
-	waveLabel:SetSize(75*scale, 20*scale);
+	waveLabel:SetSize(60*scale, 20*scale);
 	waveLabel:SetPosition(0,epicBattleLabel:GetTop()+epicBattleLabel:GetHeight());
-	wave1Label:SetSize(40*scale, 20*scale);
-	wave2Label:SetSize(40*scale, 20*scale);
-	wave3Label:SetSize(40*scale, 20*scale);
+	wave1Label:SetSize(50*scale, 20*scale);
+	wave2Label:SetSize(50*scale, 20*scale);
+	wave3Label:SetSize(50*scale, 20*scale);
 	wave1Label:SetPosition(waveLabel:GetWidth(),epicBattleLabel:GetTop()+epicBattleLabel:GetHeight());
 	wave2Label:SetPosition(wave1Label:GetLeft() + wave1Label:GetWidth(),epicBattleLabel:GetTop()+epicBattleLabel:GetHeight());
 	wave3Label:SetPosition(wave2Label:GetLeft() + wave2Label:GetWidth(),epicBattleLabel:GetTop()+epicBattleLabel:GetHeight());
+	wave1Reward:SetPosition(25*scale,0);
+	wave2Reward:SetPosition(25*scale,0);
+	wave3Reward:SetPosition(25*scale,0);	
 	infoLabel:SetSize(255*scale, 20*scale);
 	local rowWidth = waveLabel:GetWidth()+wave1Label:GetWidth()+wave2Label:GetWidth()+wave3Label:GetWidth()+infoLabel:GetWidth();
 	-- to make sure each row the same width, make sure the last label is wide enough to fill the rest of the room
@@ -204,6 +267,12 @@ function scaleMainWindow(scale)
 	trap1Label:SetSize(133*scale, 15*scale);
 	trap2Label:SetSize(134*scale, 15*scale);
 	trap3Label:SetSize(133*scale, 15*scale);
+	
+	bottomLine:SetSize(450*scale, 15*scale);	
+	bottomLine:SetPosition(0, trapsLabel:GetTop() + trapsLabel:GetHeight() );
+
+--	bottomLine, 0, 135, 450, 15
+	
 	local rowWidth = trapsLabel:GetWidth()+trap1Label:GetWidth()+trap2Label:GetWidth()+trap3Label:GetWidth();
 	if (rowWidth<epicBattleLabel:GetWidth()) then
 		trap3Label:SetWidth(epicBattleLabel:GetWidth()-(rowWidth-trap3Label:GetWidth()));
@@ -219,7 +288,7 @@ function scaleMainWindow(scale)
 	wave1Label:CalcSmallestFont("TrajanProBold", 16, true);
 	wave2Label:CalcSmallestFont("TrajanProBold", 16, true);
 	wave3Label:CalcSmallestFont("TrajanProBold", 16, true);
-	infoLabel:CalcSmallestFont("TrajanPro", 13, true);
+	infoLabel:CalcSmallestFont("TrajanProBold", 16, true);
 	timerLabel:CalcSmallestFont("TrajanPro", 15, true);
 	killCountLabel:CalcSmallestFont("TrajanPro", 15, true);
 	killQuestCountLabel:CalcSmallestFont("TrajanPro", 15, true);
@@ -238,7 +307,7 @@ function createMainWindow()
 	-- main window
 	main_window = Turbine.UI.Window();
 	main_window:SetPosition(150,150);
-	main_window:SetSize(450,135);
+	main_window:SetSize(450,150);
 	attachDragListener(main_window);
 	main_window.MouseClick = showContextMenu;
 
@@ -252,6 +321,49 @@ function createMainWindow()
 	attachDragListener(minimizeControl);
 	minimizeControl.MouseClick = showContextMenu;
 	
+	ChatControl = Turbine.UI.Control();
+	ChatControl:SetSize(16, 16);
+	ChatControl:SetParent(main_window);
+	ChatControl:SetPosition(25,2);
+	ChatControl:SetBackground("SDRPlugins/EpicBattlePlugin/resource/chat.tga");
+	ChatControl:SetZOrder(150);
+	ChatControl:SetMouseVisible(false);
+	
+	-- SetChatMessage();
+	
+	ChatSlot = Turbine.UI.Lotro.Quickslot();
+	ChatSlot:SetParent(main_window);
+	ChatSlot:SetSize(16,16);
+	ChatSlot:SetPosition(25,2);
+	ChatSlot:SetZOrder(100);
+	ChatSlot:SetUseOnRightClick(false);
+	ChatSlot:SetShortcut(Turbine.UI.Lotro.Shortcut(Turbine.UI.Lotro.ShortcutType.Alias, ""));	
+	
+	SetChatMessage();
+	attachDragListener(ChatSlot);
+	ChatSlot.MouseClick = showChatMenu;
+		
+	ChatMenu = Turbine.UI.ContextMenu();
+	ChatItems = ChatMenu:GetItems();
+	ChatItems:Add(Turbine.UI.MenuItem(EBLangData.ChatSay, true, false));
+	ChatItems:Add(Turbine.UI.MenuItem(EBLangData.ChatKinship, true, false));
+	ChatItems:Add(Turbine.UI.MenuItem(EBLangData.ChatGroup, true, false));
+	ChatItems:Add(Turbine.UI.MenuItem(EBLangData.ChatRaid, true, false));
+	ChatItems:Add(Turbine.UI.MenuItem("----------------------",false));
+	ChatItems:Add(Turbine.UI.MenuItem(EBLangData.CurrentQuest, true, false));
+	ChatItems:Add(Turbine.UI.MenuItem(EBLangData.wave1, true, false));
+	ChatItems:Add(Turbine.UI.MenuItem(EBLangData.wave2, true, false));
+	ChatItems:Add(Turbine.UI.MenuItem(EBLangData.wave3, true, false));
+	ChatItems:Add(Turbine.UI.MenuItem("----------------------",false));	
+	ChatItems:Add(Turbine.UI.MenuItem(EBLangData.ShowQuestDetail, true, false));
+	ChatItems:Add(Turbine.UI.MenuItem(EBLangData.OptionsLangLabelEN, true, false));
+	ChatItems:Add(Turbine.UI.MenuItem(EBLangData.OptionsLangLabelHU, true, false));
+		
+	for i=1, ChatItems:GetCount() do
+		ChatItems:Get(i).Click = ChatMenuClick;
+	end
+		
+		
 	winIsMin = false;
 	minimizeControl.MouseDoubleClick = function(sender, args)
 		if winIsMin then
@@ -278,36 +390,58 @@ function createMainWindow()
 	-- label that says "Waves:"
 	waveLabel = ScalingLabel();
 	waveLabel:SetMultiline(false);
-	styleLabel(waveLabel, 0, 20, 75, 20, Turbine.UI.Lotro.Font.TrajanProBold16, Turbine.UI.Color(0,0,0), Turbine.UI.ContentAlignment.MiddleCenter, EBLangData.WaveLabel);
+	styleLabel(waveLabel, 0, 20, 60, 20, Turbine.UI.Lotro.Font.TrajanProBold16, Turbine.UI.Color(0,0,0), Turbine.UI.ContentAlignment.MiddleCenter, EBLangData.WaveLabel);
 	waveLabel:CalcSmallestFontW("TrajanProBold", 16);
 	waveLabel:SetBackColor(Turbine.UI.Color(.8,.8,.8));
 	waveLabel:SetParent(main_window);
 
 	wave1Label = ScalingLabel();
 	wave1Label:SetMultiline(false);
-	styleLabel(wave1Label, 75, 20, 40, 20, Turbine.UI.Lotro.Font.TrajanProBold16, Turbine.UI.Color(0,0,0), Turbine.UI.ContentAlignment.MiddleCenter, EBLangData.Wave1Label);
+	styleLabel(wave1Label, 60, 20, 50, 20, Turbine.UI.Lotro.Font.TrajanProBold16, Turbine.UI.Color(0,0,0), Turbine.UI.ContentAlignment.MiddleLeft, EBLangData.Wave1Label);
 	wave1Label:CalcSmallestFontW("TrajanProBold", 16);
 	wave1Label:SetBackColor(Turbine.UI.Color(.7,.7,.7));
 	wave1Label:SetParent(main_window);
 
+	wave1Reward = Turbine.UI.Control();
+	wave1Reward:SetSize(20, 20);
+	wave1Reward:SetParent(wave1Label);
+	wave1Reward:SetPosition(25,0);
+	wave1Reward:SetBackground("");
+	wave1Reward:SetZOrder(150);
+
 	wave2Label = ScalingLabel();
 	wave2Label:SetMultiline(false);
-	styleLabel(wave2Label, 115, 20, 40, 20, Turbine.UI.Lotro.Font.TrajanProBold16, Turbine.UI.Color(0,0,0), Turbine.UI.ContentAlignment.MiddleCenter, EBLangData.Wave2Label);
+	styleLabel(wave2Label, 110, 20, 50, 20, Turbine.UI.Lotro.Font.TrajanProBold16, Turbine.UI.Color(0,0,0), Turbine.UI.ContentAlignment.MiddleLeft, EBLangData.Wave2Label);
 	wave2Label:CalcSmallestFontW("TrajanProBold", 16);
 	wave2Label:SetBackColor(Turbine.UI.Color(.7,.7,.7));
 	wave2Label:SetParent(main_window);
 
+	wave2Reward = Turbine.UI.Control();
+	wave2Reward:SetSize(20, 20);
+	wave2Reward:SetParent(wave2Label);
+	wave2Reward:SetPosition(25,0);
+	wave2Reward:SetBackground("");
+	wave2Reward:SetZOrder(150);
+
 	wave3Label = ScalingLabel();
 	wave3Label:SetMultiline(false);
-	styleLabel(wave3Label, 155, 20, 40, 20, Turbine.UI.Lotro.Font.TrajanProBold16, Turbine.UI.Color(0,0,0), Turbine.UI.ContentAlignment.MiddleCenter, EBLangData.Wave3Label);
+	styleLabel(wave3Label, 160, 20, 50, 20, Turbine.UI.Lotro.Font.TrajanProBold16, Turbine.UI.Color(0,0,0), Turbine.UI.ContentAlignment.MiddleLeft, EBLangData.Wave3Label);
 	wave3Label:CalcSmallestFontW("TrajanProBold", 16);
 	wave3Label:SetBackColor(Turbine.UI.Color(.7,.7,.7));
 	wave3Label:SetParent(main_window);
 
+	wave3Reward = Turbine.UI.Control();
+	wave3Reward:SetSize(20, 20);
+	wave3Reward:SetParent(wave3Label);
+	wave3Reward:SetPosition(25,0);
+	wave3Reward:SetBackground("");
+	wave3Reward:SetZOrder(150);
+
+
 	infoLabel = ScalingLabel();
 	infoLabel:SetMultiline(false);
-	styleLabel(infoLabel, 195, 20, 255, 20, Turbine.UI.Lotro.Font.TrajanPro13, Turbine.UI.Color(0,0,0), Turbine.UI.ContentAlignment.MiddleCenter, EBLangData.InfoLabel);
-	infoLabel:CalcSmallestFontW("TrajanPro", 13);
+	styleLabel(infoLabel, 210, 20, 240, 20, Turbine.UI.Lotro.Font.TrajanPro13, Turbine.UI.Color(0,0,0), Turbine.UI.ContentAlignment.MiddleCenter, EBLangData.InfoLabel);
+	infoLabel:CalcSmallestFontW("TrajanProBold", 16);
 	infoLabel:SetBackColor(Turbine.UI.Color(1,.9,.9));
 	infoLabel:SetParent(main_window);
 
@@ -473,6 +607,14 @@ function createMainWindow()
 	trap3Label:SetBackColor(Turbine.UI.Color(1,1,.9));
 	trap3Label:SetParent(main_window);
 
+	-- label for any extra information, for example new promotion points
+	bottomLine = ScalingLabel();
+	bottomLine:SetMultiline(false);
+	styleLabel(bottomLine, 0, 135, 450, 15, Turbine.UI.Lotro.Font.TrajanProBold16, Turbine.UI.Color(1,1,1), Turbine.UI.ContentAlignment.MiddleCenter, "");
+	bottomLine:CalcSmallestFontW("TrajanProBold", 15);
+	bottomLine:SetBackColor(Turbine.UI.Color(.95,.95,.95));
+	bottomLine:SetParent(main_window);
+
 	-- create a resizing control
 	resizingControl = Turbine.UI.Label();
 	resizingControl:SetZOrder(100);
@@ -534,61 +676,128 @@ end
 function createQuestTooltip(control, questLabelNumber, args)
 
 	local headerLabel = ScalingLabel();
+	local scale = OptionWindow.scaleScrollbar:GetValue();
+	local defaultWidth = 350;
+	local maxInfoHeight = 350;
+	
+	if scale>=0 and scale<=100 then
+		scale = scale/100;
+		defaultWidth = math.floor(defaultWidth*scale);
+		maxInfoHeight = math.floor(maxInfoHeight*scale);
+	end
+	
 	headerLabel:SetMultiline(false);
-	styleLabel(headerLabel, 10, 5, 230, 25, Turbine.UI.Lotro.Font.TrajanProBold22, Turbine.UI.Color(1,1,1), Turbine.UI.ContentAlignment.MiddleCenter, EBLangData.PotentialQuests);
+	styleLabel(headerLabel, 5, 5, defaultWidth, 25, Turbine.UI.Lotro.Font.TrajanProBold22, Turbine.UI.Color(1,1,1), Turbine.UI.ContentAlignment.MiddleCenter, "");
 	headerLabel:SetBackColor(Turbine.UI.Color(0,0,0));
-	headerLabel:CalcSmallestFontW("TrajanProBold", 22);
 
 	local questsLabel = ScalingLabel();
-	styleLabel(questsLabel, 10, 35, 230, 10, Turbine.UI.Lotro.Font.Verdana16, Turbine.UI.Color(1,1,1), Turbine.UI.ContentAlignment.TopLeft, "");	
+	styleLabel(questsLabel, 5, 35, defaultWidth, 10, Turbine.UI.Lotro.Font.Verdana16, Turbine.UI.Color(1,1,1), Turbine.UI.ContentAlignment.TopLeft, "");	
 	questsLabel:SetBackColor(Turbine.UI.Color(0,0,0));
 
 	if ebObj.currentWave == 0 then
 		-- show possible combinations for quest number
+		styleLabel(headerLabel, 5, 5, defaultWidth, 25, Turbine.UI.Lotro.Font.TrajanProBold22, Turbine.UI.Color(1,1,1), Turbine.UI.ContentAlignment.MiddleCenter, EBLangData.PotentialQuests);
+		headerLabel:CalcSmallestFontW("TrajanProBold", 22);
+		
 		for key, value in pairs(EpicBattleData[ebObj.spaceName].sides) do
 			if EpicBattleData[ebObj.spaceName].sides[key].wave[questLabelNumber] ~= nil then
 				for questIndex = 1, #EpicBattleData[ebObj.spaceName].sides[key].wave[questLabelNumber] do
 					if questsLabel:GetTextLength() > 0 then
-						questsLabel:AppendText("\n\n");
+						questsLabel:AppendText("\n");
 					end
-					questsLabel:AppendText(EBLangData[EpicBattleData[ebObj.spaceName].sides[key].wave[questLabelNumber][questIndex]]);
+--					Turbine.Shell.WriteLine();
+					questsLabel:AppendText("==" .. clearPattern(EBLangData[EpicBattleData[ebObj.spaceName].sides[key].wave[questLabelNumber][questIndex]]) .. "==\n");
+					questsLabel:AppendText(toUTF8(EBLangData["detailed"][ebObj.spaceName][EpicBattleData[ebObj.spaceName].sides[key].wave[questLabelNumber][questIndex]]) .. "\n");
 				end
 			end
 		end
 	else
 		-- only show more information if the quest isn't known
-		for key, value in pairs(EpicBattleData[ebObj.spaceName].sides) do
-			if EpicBattleData[ebObj.spaceName].sides[key].wave[questLabelNumber] ~= nil then
-				if #EpicBattleData[ebObj.spaceName].sides[key].wave[questLabelNumber] > 1 then
-					for questIndex = 1, #EpicBattleData[ebObj.spaceName].sides[key].wave[questLabelNumber] do
-						if questsLabel:GetTextLength() > 0 then
-							questsLabel:AppendText("\n\n");
+		if QuestDetailData[questLabelNumber] ~= "" then
+			styleLabel(headerLabel, 5, 5, defaultWidth, 25, Turbine.UI.Lotro.Font.TrajanProBold22, Turbine.UI.Color(1,1,1), Turbine.UI.ContentAlignment.MiddleCenter, EBLangData.QuestDetail);
+			headerLabel:CalcSmallestFontW("TrajanPro", 18);		
+			questsLabel:AppendText(toUTF8(QuestDetailData[questLabelNumber]) .. "\n");
+		else
+			styleLabel(headerLabel, 5, 5, defaultWidth, 25, Turbine.UI.Lotro.Font.TrajanProBold22, Turbine.UI.Color(1,1,1), Turbine.UI.ContentAlignment.MiddleCenter, EBLangData.PotentialQuests);
+			headerLabel:CalcSmallestFontW("TrajanProBold", 22);
+			
+			for key, value in pairs(EpicBattleData[ebObj.spaceName].sides) do
+				if EpicBattleData[ebObj.spaceName].sides[key].wave[questLabelNumber] ~= nil then									
+					if ebObj.spaceName == "Deeping Wall - Raid" then
+						if ebObj.DWRaidMatrix[key] == 1 then
+							for questIndex = 1, #EpicBattleData[ebObj.spaceName].sides[key].wave[questLabelNumber] do
+								if questsLabel:GetTextLength() > 0 then
+									questsLabel:AppendText("\n");
+								end
+								questsLabel:AppendText(EBLangData[EpicBattleData[ebObj.spaceName].sides[key].wave[questLabelNumber][questIndex]]);
+							end						
 						end
-						questsLabel:AppendText(EBLangData[EpicBattleData[ebObj.spaceName].sides[key].wave[questLabelNumber][questIndex]]);
-					end
-				elseif ebObj.spaceName == "Deeping Wall - Raid" and ebObj.currentWave < 3 and questLabelNumber > ebObj.currentWave then
-					if ebObj.currentWave == 1 and ebObj.waveInformation[1].side ~= key then
-						if questsLabel:GetTextLength() > 0 then
-							questsLabel:AppendText("\n\n");
-						end
-						questsLabel:AppendText(EBLangData[EpicBattleData[ebObj.spaceName].sides[key].wave[questLabelNumber][1]]);
-					elseif ebObj.currentWave == 2 and ebObj.waveInformation[1].side ~= key and ebObj.waveInformation[2].side ~= key then
-						if questsLabel:GetTextLength() > 0 then
-							questsLabel:AppendText("\n\n");
-						end
-						questsLabel:AppendText(EBLangData[EpicBattleData[ebObj.spaceName].sides[key].wave[questLabelNumber][1]]);
-					end
+					else
+						for questIndex = 1, #EpicBattleData[ebObj.spaceName].sides[key].wave[questLabelNumber] do
+							if questsLabel:GetTextLength() > 0 then
+								questsLabel:AppendText("\n");
+							end
+--							questsLabel:AppendText(EBLangData[EpicBattleData[ebObj.spaceName].sides[key].wave[questLabelNumber][questIndex]]);
+							questsLabel:AppendText("==" .. clearPattern(EBLangData[EpicBattleData[ebObj.spaceName].sides[key].wave[questLabelNumber][questIndex]]) .. "==\n");
+							questsLabel:AppendText(toUTF8(EBLangData["detailed"][ebObj.spaceName][EpicBattleData[ebObj.spaceName].sides[key].wave[questLabelNumber][questIndex]]) .. "\n");
+						end						
+					end								
 				end
-			end
+			end                      			
 		end
+		
+		
+--		for key, value in pairs(EpicBattleData[ebObj.spaceName].sides) do
+--			if EpicBattleData[ebObj.spaceName].sides[key].wave[questLabelNumber] ~= nil then
+--				questsLabel:AppendText(EBLangData["detailed"][EpicBattleData[ebObj.spaceName].sides[key].wave[questLabelNumber][1]]);
+--				questsLabel:AppendText("\n");
+				
+--				if ebObj.waveInformation[questLabelNumber].side == key then
+--					questsLabel:AppendText(ebObj.waveInformation[questLabelNumber].side);
+					
+--					questsLabel:AppendText(QuestDetailData[questLabelNumber]);
+
+--					questsLabel:AppendText("\n");					
+--				end
+				
+				
+--				if #EpicBattleData[ebObj.spaceName].sides[key].wave[questLabelNumber] > 1 then
+--					for questIndex = 1, #EpicBattleData[ebObj.spaceName].sides[key].wave[questLabelNumber] do
+--						if questsLabel:GetTextLength() > 0 then
+--							questsLabel:AppendText("\n\n");
+--						end
+--						questsLabel:AppendText(EBLangData[EpicBattleData[ebObj.spaceName].sides[key].wave[questLabelNumber][questIndex]]);
+--					end
+--				elseif ebObj.spaceName == "Deeping Wall - Raid" and ebObj.currentWave < 3 and questLabelNumber > ebObj.currentWave then
+--					if ebObj.currentWave == 1 and ebObj.waveInformation[1].side ~= key then
+--						if questsLabel:GetTextLength() > 0 then
+--							questsLabel:AppendText("\n\n");
+--						end
+--						questsLabel:AppendText(EBLangData[EpicBattleData[ebObj.spaceName].sides[key].wave[questLabelNumber][1]]);
+--					elseif ebObj.currentWave == 2 and ebObj.waveInformation[1].side ~= key and ebObj.waveInformation[2].side ~= key then
+--						if questsLabel:GetTextLength() > 0 then
+--							questsLabel:AppendText("\n\n");
+--						end
+--						questsLabel:AppendText(EBLangData[EpicBattleData[ebObj.spaceName].sides[key].wave[questLabelNumber][1]]);
+--					end
+--				end
+--			end
+--		end
+	
 	end
+	
 	questsLabel:CalcSmallestHeight();
+	if questsLabel:GetHeight() > maxInfoHeight then
+		questsLabel:SetSize(questsLabel:GetWidth(), maxInfoHeight );
+	end
+	questsLabel:CalcSmallestFontH("TrajanPro", 18, true);
+	
 
 	window = Turbine.UI.Window();
 	window:SetZOrder(250); -- make sure tooltip appears above everything else
 	window:SetBackColor(Turbine.UI.Color(0,0,0));
 	window:SetOpacity(.9);
-	window:SetSize( 250, headerLabel:GetHeight()+questsLabel:GetHeight() + 5 );
+	window:SetSize( defaultWidth+10, headerLabel:GetHeight()+questsLabel:GetHeight() + 5 );
 	if questsLabel:GetTextLength() == 0 or (ebObj.currentWave >= questLabelNumber and (ebObj.waveInformation[questLabelNumber] ~= nil and ebObj.waveInformation[questLabelNumber].hasEnded)) then
 		window:SetSize(0,0);
 	end
@@ -628,8 +837,98 @@ function endOldWaveAndStartNewWave(waveSide)
 	end
 end
 
-function showContextMenu(sender, args)
+-- Set the chat message
+function SetChatMessage() 
+	local message;
+	message = ChatData.chat .. " ";
+	quest = ChatData.wave;	
+	
+	if quest==0 then 
+		if ebObj ~= nil then
+			if ebObj.currentWave ~= 0 then quest = ebObj.currentWave;
+			else return "";
+			end			
+		end			
+	end
+	
+	if ChatData.language == "hu" then
+		import "SDRPlugins.EpicBattlePlugin.Language_ext_hu";
+	else
+		import "SDRPlugins.EpicBattlePlugin.Language_ext_en";
+	end
+	
+	
+	if quest == 1 then message = message .. "<rgb=#FF0000>" .. quest1Label:GetText() .. "</rgb>";	
+	elseif quest == 2 then message = message .. "<rgb=#FF0000>" .. quest2Label:GetText() .. "</rgb>";
+	elseif quest == 3 then message = message .. "<rgb=#FF0000>" .. quest3Label:GetText() .. "</rgb>";		
+	end
+	
+	if QuestDetailData[quest] ~= "" and QuestDetailData[quest] ~= nil and ChatData.detail == 1 then
+		message = message .. "\n" .. QuestDetailData[quest];
+	end
+	ChatSlot:SetShortcut(Turbine.UI.Lotro.Shortcut(Turbine.UI.Lotro.ShortcutType.Alias, message));	
+end
 
+-- All chat menu click function
+function ChatMenuClick(sender, args)	
+	local ItemNo = ChatItems:IndexOf(sender);
+	if ItemNo == 1 then ChatData.chat = "/SAY"; 
+	elseif ItemNo == 2 then ChatData.chat = "/K"; 
+	elseif ItemNo == 3 then ChatData.chat = "/F"; 
+	elseif ItemNo == 4 then ChatData.chat = "/RA"; 
+	elseif ItemNo == 6 then ChatData.wave = 0; 
+	elseif ItemNo == 7 then ChatData.wave = 1; 
+	elseif ItemNo == 8 then ChatData.wave = 2; 
+	elseif ItemNo == 9 then ChatData.wave = 3;
+	elseif ItemNo == 12 then ChatData.language = "en";
+	elseif ItemNo == 13 then ChatData.language = "hu";
+	end
+	
+	if ItemNo == 11 then 
+		if sender:IsChecked()==true then ChatData.detail = 0; sender:SetChecked(false);
+		else ChatData.detail = 1; sender:SetChecked(true);
+		end
+	else
+		sender:SetChecked(true);		
+	end
+	SetChatMessage();	
+	ChatMenuSet();
+	saveState();
+end
+
+-- Check the correct menu items
+function ChatMenuSet() 
+	for i=1, ChatItems:GetCount() do
+		ChatItems:Get(i):SetChecked(false);
+	end
+
+	if ChatData.chat == "/SAY" then ChatItems:Get(1):SetChecked(true)
+	elseif ChatData.chat == "/K" then ChatItems:Get(2):SetChecked(true)
+	elseif ChatData.chat == "/F" then ChatItems:Get(3):SetChecked(true)
+	elseif ChatData.chat == "/RA" then ChatItems:Get(4):SetChecked(true)
+	end
+	if ChatData.wave == 0 then ChatItems:Get(6):SetChecked(true)
+	elseif ChatData.wave == 1 then ChatItems:Get(7):SetChecked(true)
+	elseif ChatData.wave == 2 then ChatItems:Get(8):SetChecked(true)
+	elseif ChatData.wave == 3 then ChatItems:Get(9):SetChecked(true)
+	end	
+	if ChatData.detail == 1 then ChatItems:Get(11):SetChecked(true); end
+	
+	if ChatData.language == "en" then ChatItems:Get(12):SetChecked(true)
+	elseif ChatData.language == "hu" then ChatItems:Get(13):SetChecked(true)
+	end
+	
+end
+
+-- Show the chat menu if mouse click
+function showChatMenu(sender, args)
+	if args.Button == Turbine.UI.MouseButton.Right then	
+		ChatMenuSet();
+		ChatMenu:ShowMenu();	
+	end		
+end
+
+function showContextMenu(sender, args)
 	if ( args.Button == Turbine.UI.MouseButton.Right ) and sender == main_window then
 		if args.Y > 0 and args.Y < (20*(OptionWindow.scaleScrollbar:GetValue()/100)) then -- the user right clicked on the main heading - allow them to setup a specific instance
 			local context_menu = Turbine.UI.ContextMenu();
@@ -642,6 +941,7 @@ function showContextMenu(sender, args)
 			items:Add(Turbine.UI.MenuItem(EBLangData.StartNewEpicBattle .. EBLangData["Glittering Caves - Solo/Duo"]));
 			items:Add(Turbine.UI.MenuItem(EBLangData.StartNewEpicBattle .. EBLangData["Glittering Caves - Small Fellowship"]));
 			items:Add(Turbine.UI.MenuItem(EBLangData.StartNewEpicBattle .. EBLangData["The Hornburg - Solo/Duo"]));
+			items:Add(Turbine.UI.MenuItem(EBLangData.StartNewEpicBattle .. EBLangData["Retaking Pelargir - Solo/Duo"]));
 			items:Add(Turbine.UI.MenuItem(EBLangData.OptionsMenu));
 
 			items:Get(1).Click = function(s, a) setUpEBObj("Helm's Dike - Solo/Duo"); end
@@ -652,7 +952,8 @@ function showContextMenu(sender, args)
 			items:Get(6).Click = function(s, a) setUpEBObj("Glittering Caves - Solo/Duo"); end
 			items:Get(7).Click = function(s, a) setUpEBObj("Glittering Caves - Small Fellowship"); end
 			items:Get(8).Click = function(s, a) setUpEBObj("The Hornburg - Solo/Duo"); end
-			items:Get(9).Click = function(s, a) OptionWindow:Show(); end
+			items:Get(9).Click = function(s, a) setUpEBObj("Retaking Pelargir - Solo/Duo"); end
+			items:Get(10).Click = function(s, a) OptionWindow:Show(); end
 
     			context_menu:ShowMenu();
 		elseif ebObj ~= nil and args.Y > (20*(OptionWindow.scaleScrollbar:GetValue()/100)) and args.Y < (40*(OptionWindow.scaleScrollbar:GetValue()/100)) then -- the user may be clicking on the waves - allow them to setup specific waves
@@ -697,7 +998,7 @@ function showContextMenu(sender, args)
 					items:Add(menuItem);
 				end
 
-				if EpicBattleData[ebObj.spaceName].sides["Only"] ~= nil and waveNumber ~= 2 then
+				if EpicBattleData[ebObj.spaceName].sides["Only"] ~= nil and waveNumber ~= EpicBattleData[ebObj.spaceName].waves then
 					local menuItem = Turbine.UI.MenuItem(EBLangData.MenuOnlySide);
 					menuItem.Click = function(s,a) endOldWaveAndStartNewWave("Only"); end
 					items:Add(menuItem);
@@ -754,11 +1055,23 @@ function setQuestLabel(waveNum, text)
 	end
 end
 
+function setQuestReward(waveNum, reward)
+	if reward>=1 and reward<=4 then
+		if waveNum == 1 then
+			wave1Reward:SetBackground("SDRPlugins/EpicBattlePlugin/resource/" .. QuestRewardData[reward]);
+		elseif waveNum == 2 then
+			wave2Reward:SetBackground("SDRPlugins/EpicBattlePlugin/resource/" .. QuestRewardData[reward]);
+		elseif waveNum == 3 then
+			wave3Reward:SetBackground("SDRPlugins/EpicBattlePlugin/resource/" .. QuestRewardData[reward]);
+		end	
+	end
+end
+
+
 -- update all parts of the UI when needed
 function updateUI()
 	-- only update main UI if there is an EB going on
-	if ebObj ~= nil then
-
+	if ebObj ~= nil then		
 		-- update main label
 		epicBattleLabel:SetText(EBLangData[ebObj.spaceName]);
 
@@ -766,22 +1079,52 @@ function updateUI()
 		if ebObj.currentWave > 0 then
 			-- set quests if needed/possible
 			local nextWaveSide = ebObj.waveInformation[ebObj.currentWave].side;
+			if nextWaveSide ~= nil then
+				infoLabel:SetText(EBLangData.CurrentSideInfo .. ebObj.waveInformation[ebObj.currentWave].side);
+			else
+				infoLabel:SetText(EBLangData.InfoLabel);
+			end
+			
 			for i = ebObj.currentWave, ebObj.waves do
 				-- if we can't know which side will be next, we can't place quest names yet
 				if nextWaveSide ~= nil then
 					-- only one quest, set that to the label
 					if #EpicBattleData[ebObj.spaceName].sides[nextWaveSide].wave[i] == 1 then
-						setQuestLabel(i, EBLangData[EpicBattleData[ebObj.spaceName].sides[nextWaveSide].wave[i][1]]);
-			
+						setQuestLabel(i, clearPattern(EBLangData[EpicBattleData[ebObj.spaceName].sides[nextWaveSide].wave[i][1]]));
+						QuestDetailData[i] = ( EBLangData["detailed"][ebObj.spaceName][EpicBattleData[ebObj.spaceName].sides[nextWaveSide].wave[i][1]]);
+						
 					-- multiple quests, set "Random" to the label -- make a pop up window for these quests
 					elseif #EpicBattleData[ebObj.spaceName].sides[nextWaveSide].wave[i] > 1 then
-						setQuestLabel(i, EBLangData.RandomQuest);
+						if (RandomQuestData["spaceName"] == ebObj.spaceName) and (RandomQuestData["wave"] == i) then
+							setQuestLabel(i,clearPattern(RandomQuestData["quest"]));
+							QuestDetailData[i] = RandomQuestData["detail"];
+						else
+							setQuestLabel(i, EBLangData.RandomQuest);						
+							QuestDetailData[i] = "";
+						end
 					end
 					nextWaveSide = EpicBattleData[ebObj.spaceName].sides[nextWaveSide].wave[i].nextSide;
-				else -- unknown (only used for Deeping Wall raid) -- maybe set up pop up window to display possible order?
+				else -- unknown (only used for Deeping Wall raid) -- maybe set up pop up window to display possible order?					
 					setQuestLabel(i, EBLangData.UnknownQuest);
+					QuestDetailData[i] = "";					
+					if ebObj.currentWave>1 and i==3 then
+						if ebObj.DWRaidMatrix["Western"] == 1 then
+							QuestDetailData[i] = "Western";
+							setQuestLabel(i, EBLangData[EpicBattleData[ebObj.spaceName].sides["Western"].wave[i][1]]);
+							QuestDetailData[i] = ( EBLangData["detailed"][ebObj.spaceName][EpicBattleData[ebObj.spaceName].sides["Western"].wave[i][1]]);
+						elseif ebObj.DWRaidMatrix["Eastern"] == 1 then						
+							QuestDetailData[i] = "Eastern";
+							setQuestLabel(i, EBLangData[EpicBattleData[ebObj.spaceName].sides["Eastern"].wave[i][1]]);
+							QuestDetailData[i] = ( EBLangData["detailed"][ebObj.spaceName][EpicBattleData[ebObj.spaceName].sides["Eastern"].wave[i][1]]);
+						elseif ebObj.DWRaidMatrix["Centre"] == 1 then						
+							QuestDetailData[i] = "Centre";
+							setQuestLabel(i, EBLangData[EpicBattleData[ebObj.spaceName].sides["Centre"].wave[i][1]]);
+							QuestDetailData[i] = ( EBLangData["detailed"][ebObj.spaceName][EpicBattleData[ebObj.spaceName].sides["Centre"].wave[i][1]]);
+						end						
+					end
 				end
 			end
+			
 			if ebObj.waves < 3 then
 				setQuestLabel(3, EBLangData.NoneLabel);
 				wave3Label:SetBackColor(Turbine.UI.Color(.3,.3,.3));
@@ -823,9 +1166,12 @@ function updateUI()
 					quest3Label:SetBackColor(Turbine.UI.Color(.5,1,.5));
 				end
 			end
-
+			SetChatMessage();
 			timerControl:SetWantsUpdates(true);
 		else
+			bottomLine:SetText("");
+			bottomLine:SetBackColor(Turbine.UI.Color(.95,.95,.95));
+			infoLabel:SetText(EBLangData.InfoLabel);
 			setQuestLabel(1, EBLangData.UnknownQuest);
 			setQuestLabel(2, EBLangData.UnknownQuest);
 			setQuestLabel(3, EBLangData.UnknownQuest);
@@ -839,9 +1185,13 @@ function updateUI()
 			wave1Label:SetBackColor(Turbine.UI.Color(.7,.7,.7));
 			wave2Label:SetBackColor(Turbine.UI.Color(.7,.7,.7));
 			wave3Label:SetBackColor(Turbine.UI.Color(.7,.7,.7));
+			wave1Reward:SetBackground("");
+			wave2Reward:SetBackground("");
+			wave3Reward:SetBackground("");			
 			quest1Label:SetBackColor(Turbine.UI.Color(.7,.7,.7));
 			quest2Label:SetBackColor(Turbine.UI.Color(.7,.7,.7));
 			quest3Label:SetBackColor(Turbine.UI.Color(.7,.7,.7));
+			SetChatMessage();
 		end
 	else
 		-- reset to default look after a battle
@@ -862,6 +1212,11 @@ function updateUI()
 		quest1Label:SetBackColor(Turbine.UI.Color(.7,.7,.7));
 		quest2Label:SetBackColor(Turbine.UI.Color(.7,.7,.7));
 		quest3Label:SetBackColor(Turbine.UI.Color(.7,.7,.7));
+		infoLabel:SetText(EBLangData.InfoLabel);
+		wave1Reward:SetBackground("");
+		wave2Reward:SetBackground("");
+		wave3Reward:SetBackground("");			
+		SetChatMessage();
 	end
 end
 
@@ -891,45 +1246,45 @@ end
 timerControl.Update = function(sender, args)
 	local gameTime = Turbine.Engine:GetGameTime();
 
-	if ebObj ~= nil and ebObj.currentWave > 0 then
-
-		for wave = 1, #ebObj.waveInformation do
-			if not ebObj.waveInformation[wave].hasEnded and ebObj.waveInformation[wave].startTime + ebObj.waveInformation[wave].delay < gameTime and gameTime - ebObj.waveInformation[wave].lastKillCountUpdate > 1 then
-				local addKillCount = (gameTime - ebObj.waveInformation[wave].lastKillCountUpdate) * ebObj.waveInformation[wave].killTimeRatio;
-				ebObj:IncreaseEstKillCount(wave, addKillCount);
-				ebObj.waveInformation[wave].lastKillCountUpdate = gameTime;
-			end
-		end
-
-		local currentKillCount = round(ebObj.waveInformation[ebObj.currentWave].estKillCount, 0);
-		killCountLabel:SetText(EBLangData.KillCount .. currentKillCount);
-
-		local timeRemaining = ebObj.waveInformation[ebObj.currentWave].actualEndTime - gameTime;
-		
-		if timeRemaining < 0 then
-			timerControl:SetWantsUpdates(false);
-			timerLabel:SetText(EBLangData.EndsIn .. EBLangData.Soon);
-		else
-			setTimerLabel(timerLabel, EBLangData.EndsIn, ebObj.waveInformation[ebObj.currentWave].endTime - gameTime);
-		end
-
-		if ebObj.waveInformation[ebObj.currentWave].killTimeRatio > 0 then
-			local secondsTilSideQuest = (ebObj.waveInformation[ebObj.currentWave].sideQuestStart - ebObj.waveInformation[ebObj.currentWave].estKillCount)/ebObj.waveInformation[ebObj.currentWave].killTimeRatio;
-			if secondsTilSideQuest < 0 then secondsTilSideQuest = 0; end
-			if gameTime - ebObj.waveInformation[ebObj.currentWave].startTime < ebObj.waveInformation[ebObj.currentWave].delay then
-				secondsTilSideQuest = secondsTilSideQuest + (ebObj.waveInformation[ebObj.currentWave].delay - (gameTime - ebObj.waveInformation[ebObj.currentWave].startTime)); -- add the delay into the seconds so that the quest timer will count down correctly
-			end
-
-			if secondsTilSideQuest <= 0 then
-				killQuestCountLabel:SetText(EBLangData.TilSideQuestStarts .. EBLangData.Soon);
-				if ebObj.waveInformation[ebObj.currentWave].sideQuestTimerTotal == nil then
-					ebObj.waveInformation[ebObj.currentWave].sideQuestTimerTotal = gameTime - ebObj.waveInformation[ebObj.currentWave].startTime;
+	if ebObj ~= nil then
+		if ebObj.currentWave > 0 then
+			for wave = 1, #ebObj.waveInformation do
+				if not ebObj.waveInformation[wave].hasEnded and ebObj.waveInformation[wave].startTime + ebObj.waveInformation[wave].delay < gameTime and gameTime - ebObj.waveInformation[wave].lastKillCountUpdate > 1 then
+					local addKillCount = (gameTime - ebObj.waveInformation[wave].lastKillCountUpdate) * ebObj.waveInformation[wave].killTimeRatio;
+					ebObj:IncreaseEstKillCount(wave, addKillCount);
+					ebObj.waveInformation[wave].lastKillCountUpdate = gameTime;
 				end
-			else
-				setTimerLabel(killQuestCountLabel, EBLangData.TilSideQuestStarts, secondsTilSideQuest);
 			end
-		end
 
+			local currentKillCount = round(ebObj.waveInformation[ebObj.currentWave].estKillCount, 0);
+			killCountLabel:SetText(EBLangData.KillCount .. currentKillCount);
+
+			local timeRemaining = ebObj.waveInformation[ebObj.currentWave].actualEndTime - gameTime;
+
+			if timeRemaining < 0 then
+				timerControl:SetWantsUpdates(false);
+				timerLabel:SetText(EBLangData.EndsIn .. EBLangData.Soon);
+			else
+				setTimerLabel(timerLabel, EBLangData.EndsIn, ebObj.waveInformation[ebObj.currentWave].endTime - gameTime);
+			end
+
+			if ebObj.waveInformation[ebObj.currentWave].killTimeRatio > 0 then
+				local secondsTilSideQuest = (ebObj.waveInformation[ebObj.currentWave].sideQuestStart - ebObj.waveInformation[ebObj.currentWave].estKillCount)/ebObj.waveInformation[ebObj.currentWave].killTimeRatio;
+				if secondsTilSideQuest < 0 then secondsTilSideQuest = 0; end
+				if gameTime - ebObj.waveInformation[ebObj.currentWave].startTime < ebObj.waveInformation[ebObj.currentWave].delay then
+					secondsTilSideQuest = secondsTilSideQuest + (ebObj.waveInformation[ebObj.currentWave].delay - (gameTime - ebObj.waveInformation[ebObj.currentWave].startTime)); -- add the delay into the seconds so that the quest timer will count down correctly
+				end
+
+				if secondsTilSideQuest <= 0 then
+					killQuestCountLabel:SetText(EBLangData.TilSideQuestStarts .. EBLangData.Soon);
+					if ebObj.waveInformation[ebObj.currentWave].sideQuestTimerTotal == nil then
+						ebObj.waveInformation[ebObj.currentWave].sideQuestTimerTotal = gameTime - ebObj.waveInformation[ebObj.currentWave].startTime;
+					end
+				else
+					setTimerLabel(killQuestCountLabel, EBLangData.TilSideQuestStarts, secondsTilSideQuest);
+				end
+			end			
+		end
 		-- set trap information
 		if trapsTable[1] ~= nil then
 			local trapDurRemaining = trapsTable[1].endTime - gameTime;

@@ -10,6 +10,7 @@ if GLocale == 268435460 then
 else
 	GLocale = "en";
 	import "SDRPlugins.EpicBattlePlugin.Language_en";
+	import "SDRPlugins.EpicBattlePlugin.Language_ext_en";
 end
 
 import "SDRPlugins.EpicBattlePlugin.Class";
@@ -36,7 +37,23 @@ import "SDRPlugins.EpicBattlePlugin.VindarPatch";
 --STANDARD_KILL_TIME_RATIO = 0; -- usually it seems most instances have a kill/time ratio of 0.5 as a basic start
 --STANDARD_DELAY = 120; -- most instances have about 2 minutes between wave starting and the mobs arriving
 
-EpicBattleData = {}
+
+ChatData = {};
+ChatData.chat = "/RA";
+ChatData.wave = 0;
+ChatData.detail = 1;
+ChatData.language = "hu";
+
+QuestDetailData = {};
+QuestRewardData = {};
+RandomQuestData = {};
+
+QuestRewardData[1] = "reward_bronze.tga";
+QuestRewardData[2] = "reward_silver.tga";
+QuestRewardData[3] = "reward_gold.tga";
+QuestRewardData[4] = "reward_platinum.tga";
+
+EpicBattleData = {};
 
 -- Information for Helm's Dike Solo
 EpicBattleData["Helm's Dike - Solo/Duo"] = {};
@@ -310,7 +327,7 @@ EpicBattleData["Glittering Caves - Solo/Duo"].sides["Centre"].wave[3].killTimeRa
 EpicBattleData["Glittering Caves - Solo/Duo"].sides["Centre"].wave[3].maxTime = 700;
 EpicBattleData["Glittering Caves - Solo/Duo"].sides["Centre"].wave[3].killCount = 70;
 EpicBattleData["Glittering Caves - Solo/Duo"].sides["Centre"].wave[3].delay = 50;
-EpicBattleData["Glittering Caves - Solo/Duo"].sides["Centre"].wave[3][1] = "Civilian Defense";
+EpicBattleData["Glittering Caves - Solo/Duo"].sides["Centre"].wave[3][1] = "Civilian Defence";
 EpicBattleData["Glittering Caves - Solo/Duo"].sides["Centre"].wave[3][2] = "Preparing the Charge";
 
 -- Information for Glittering Caves Small Fellowship
@@ -351,7 +368,6 @@ EpicBattleData["Glittering Caves - Small Fellowship"].sides["Eastern"].wave[2].k
 EpicBattleData["Glittering Caves - Small Fellowship"].sides["Eastern"].wave[2].delay = 89;
 EpicBattleData["Glittering Caves - Small Fellowship"].sides["Eastern"].wave[2].nextSide = "Centre";
 EpicBattleData["Glittering Caves - Small Fellowship"].sides["Eastern"].wave[2][1] = "Spider Assault";
-
 EpicBattleData["Glittering Caves - Small Fellowship"].sides["Centre"] = {};
 EpicBattleData["Glittering Caves - Small Fellowship"].sides["Centre"].wave = {}; -- will store the information for each wave of the instance
 EpicBattleData["Glittering Caves - Small Fellowship"].sides["Centre"].wave[3] = {}; -- indicates wave 3 on this side
@@ -359,7 +375,7 @@ EpicBattleData["Glittering Caves - Small Fellowship"].sides["Centre"].wave[3].ki
 EpicBattleData["Glittering Caves - Small Fellowship"].sides["Centre"].wave[3].maxTime = 650;
 EpicBattleData["Glittering Caves - Small Fellowship"].sides["Centre"].wave[3].killCount = 30;
 EpicBattleData["Glittering Caves - Small Fellowship"].sides["Centre"].wave[3].delay = 48;
-EpicBattleData["Glittering Caves - Small Fellowship"].sides["Centre"].wave[3][1] = "Civilian Defense";
+EpicBattleData["Glittering Caves - Small Fellowship"].sides["Centre"].wave[3][1] = "Civilian Defence";
 EpicBattleData["Glittering Caves - Small Fellowship"].sides["Centre"].wave[3][2] = "Preparing the Charge";
 
 -- Information for The Horburg Solo
@@ -375,7 +391,7 @@ EpicBattleData["The Hornburg - Solo/Duo"].sides["Only"].wave[1].maxTime = 660;
 EpicBattleData["The Hornburg - Solo/Duo"].sides["Only"].wave[1].killCount = 127;
 EpicBattleData["The Hornburg - Solo/Duo"].sides["Only"].wave[1].nextSide = "Only";
 EpicBattleData["The Hornburg - Solo/Duo"].sides["Only"].wave[1].delay = 106;
-EpicBattleData["The Hornburg - Solo/Duo"].sides["Only"].wave[1][1] = "Bringing Down the Siege Ladders";
+EpicBattleData["The Hornburg - Solo/Duo"].sides["Only"].wave[1][1] = "Bring Down the Siege Ladders";
 EpicBattleData["The Hornburg - Solo/Duo"].sides["Only"].wave[1][2] = "Repair the Portcullis";
 EpicBattleData["The Hornburg - Solo/Duo"].sides["Only"].wave[2] = {}; -- indicates wave 2 on this side
 EpicBattleData["The Hornburg - Solo/Duo"].sides["Only"].wave[2].killTimeRatio = 0.75;
@@ -385,3 +401,37 @@ EpicBattleData["The Hornburg - Solo/Duo"].sides["Only"].wave[2].delay = 102;
 EpicBattleData["The Hornburg - Solo/Duo"].sides["Only"].wave[2][1] = "Protecting the Gatehouse";
 EpicBattleData["The Hornburg - Solo/Duo"].sides["Only"].wave[2][2] = "Winches in the Windows";
 EpicBattleData["The Hornburg - Solo/Duo"].sides["Only"].wave[2][3] = "The Final Blockade";
+
+
+-- Pelangir
+
+-- Information for Retaking Pelargir
+EpicBattleData["Retaking Pelargir - Solo/Duo"] = {};
+EpicBattleData["Retaking Pelargir - Solo/Duo"].waves = 3;
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides = {}; -- will hold the sides this space has
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"] = {};
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave = {}; 
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[1] = {}; 
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[1].killTimeRatio = 0.5;
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[1].maxTime = 2000; 
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[1].killCount = 10; 
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[1].nextSide = "Only"; 
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[1].delay = 500; 
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[1][1] = "Kang-kethek the Sorcerer";
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[1][2] = "Ugturu the Half-troll";
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[2] = {};
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[2].killTimeRatio = 0.5; 
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[2].maxTime = 600; 
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[2].killCount = 10; 
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[2].nextSide = "Only"; 
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[2].delay = 120; 
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[2][1] = "Parade of Thieves";
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[2][2] = "Backs to the Wall";
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[3] = {}; -- indicates wave 3 on this side
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[3].killTimeRatio = 0.5; 
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[3].maxTime = 600; 
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[3].killCount = 10; 
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[3].delay = 120; 
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[3][1] = "Archer Thisarti";
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[3][2] = "Okurayo the Minstrel";
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[3][3] = "The Thrice Blown Horn";

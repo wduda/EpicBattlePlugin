@@ -66,10 +66,10 @@ EBLangData["Stalactites Over the Bridge"] = "Stalactites Over the Bridge";
 EBLangData["Bombs and Bats"] = "Bombs and Bats";
 EBLangData["Cave In"] = "Cave In";
 EBLangData["Spider Assault"] = "Spider Assault";
-EBLangData["Civilian Defense"] = "Civilian Defense";
+EBLangData["Civilian Defence"] = "Civilian Defence";
 EBLangData["Preparing the Charge"] = "Preparing the Charge";
 EBLangData["Protecting the Gatehouse"] = "Protecting the Gatehouse";
-EBLangData["Bringing Down the Siege Ladders"] = "Bringing Down the Siege Ladders";
+EBLangData["Bring Down the Siege Ladders"] = "Bring Down the Siege Ladders";
 EBLangData["Repair the Portcullis"] = "Repair the Portcullis";
 EBLangData["Winches in the Windows"] = "Winches in the Windows";
 EBLangData["The Final Blockade"] = "The Final Blockade";
@@ -86,6 +86,7 @@ EBLangData.GlitteringCaves = "New Quest: The Glittering Caves";
 EBLangData.DeepingWall = "New Quest: The Deeping Wall";
 EBLangData.DeepingCoomb = "New Quest: The Deeping%-coomb";
 EBLangData.Hornburg = "New Quest: The Hornburg";
+EBLangData.Retaking = "New Quest: Retaking Pelargir";
 
 -- Need in-game translations of these keywords to determine if the main quest is a Small Fellowship, Fellowship, or Raid
 EBLangData.Fellowship = "Fellowship";
@@ -99,6 +100,8 @@ EBLangData.Berserker = "Berserker";
 EBLangData.Archer = "Archer";
 EBLangData.Sapper = "Sapper";
 EBLangData.Commander = "Commander";
+EBLangData.Haradrim = "Haradrim";
+EBLangData.Corsair = "Corsair";
 
 -- Need in-game translations to see which side is being attacked, when a wave ends, etc. Must exactly match.
 -- In Helm's Dike:
@@ -130,6 +133,12 @@ EBLangData.DCWaveEnding2 = "We cannot hold here, they number too many. Retreat";
 -- Hornburg
 EBLangData.HBStart = "The enemy is massing and preparing his assault. Ready your defences";
 EBLangData.HBWaveEnding = "They are thinning. We will soon have a break. Make the best of it";
+-- Retaking Pelargir - Solo/Duo
+EBLangData.RPStart1 = "Within Pelargir's walls, just as you promised!";
+EBLangData.RPStart = "New Quest:";
+EBLangData.RPWaveEnding = "Completed:";
+
+
 
 -- Need in game translations to see when the players enters a chat channel - this means they have left the epic battle instance
 EBLangData.EnteredChatChannel = "Entered the .- channel";
