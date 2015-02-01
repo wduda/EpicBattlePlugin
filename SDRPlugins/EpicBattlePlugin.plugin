@@ -3,7 +3,7 @@
 	<Information>
 		<Name>EpicBattlePlugin</Name>
 		<Author>Alvirhelm</Author>
-		<Version>1.1</Version>
+		<Version>1.2</Version>
 		<Description>EpicBattlePlugin (EBP) monitors which Epic Battle instance you are in, and displays information pertaining to that epic battle, including quest order, traps you have placed, and timers.</Description>
 		<Image>SDRPlugins/EpicBattlePlugin/EBP_symbol_large.jpg</Image>
 	</Information>

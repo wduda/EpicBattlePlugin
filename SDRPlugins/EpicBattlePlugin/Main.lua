@@ -103,6 +103,9 @@ if debuggingMode then
 			if pastEpicBattles[battleIndex].waveInformation[i].sideQuestTimeStart ~= nil then
 				Turbine.Shell.WriteLine("      Start Time to Quest Start Time: " .. round((pastEpicBattles[battleIndex].waveInformation[i].sideQuestTimeStart - pastEpicBattles[battleIndex].waveInformation[i].startTime), 0));
 			end
+			if pastEpicBattles[battleIndex].waveInformation[i].sideQuestTimerTotal ~= nil then
+				Turbine.Shell.WriteLine("      Estimated Quest Timer: " .. round((pastEpicBattles[battleIndex].waveInformation[i].sideQuestTimerTotal)));
+			end
 			if pastEpicBattles[battleIndex].waveInformation[i].endTime ~= nil then
 				Turbine.Shell.WriteLine("      Estimated Wave Duration: " .. round((pastEpicBattles[battleIndex].waveInformation[i].endTime - pastEpicBattles[battleIndex].waveInformation[i].startTime), 0));
 			end

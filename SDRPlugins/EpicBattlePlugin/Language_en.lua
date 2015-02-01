@@ -84,7 +84,7 @@ EBLangData.TrapCombatChat = "applied a .*benefit.* with Trap"; -- the .* capture
 EBLangData.HelmsDike = "New Quest: Helm's Dike";
 EBLangData.GlitteringCaves = "New Quest: The Glittering Caves";
 EBLangData.DeepingWall = "New Quest: The Deeping Wall";
-EBLangData.DeepingCoomb = "New Quest: The Deeping-coomb";
+EBLangData.DeepingCoomb = "New Quest: The Deeping%-coomb";
 EBLangData.Hornburg = "New Quest: The Hornburg";
 
 -- Need in-game translations of these keywords to determine if the main quest is a Small Fellowship, Fellowship, or Raid

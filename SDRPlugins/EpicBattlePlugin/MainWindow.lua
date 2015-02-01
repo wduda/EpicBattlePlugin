@@ -922,6 +922,9 @@ timerControl.Update = function(sender, args)
 
 			if secondsTilSideQuest <= 0 then
 				killQuestCountLabel:SetText(EBLangData.TilSideQuestStarts .. EBLangData.Soon);
+				if ebObj.waveInformation[ebObj.currentWave].sideQuestTimerTotal == nil then
+					ebObj.waveInformation[ebObj.currentWave].sideQuestTimerTotal = gameTime - ebObj.waveInformation[ebObj.currentWave].startTime;
+				end
 			else
 				setTimerLabel(killQuestCountLabel, EBLangData.TilSideQuestStarts, secondsTilSideQuest);
 			end
