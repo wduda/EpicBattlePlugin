@@ -9,7 +9,7 @@ function OptionWindow:Constructor()
 	local displayHeight = Turbine.UI.Display:GetHeight();
 
 	-- create the Window
-	self:SetSize( 400, 300 );
+	if hasDWRA then self:SetSize(400,340); else self:SetSize( 400, 300 ); end
 	self:SetPosition((displayWidth-self:GetWidth())/2,(displayHeight-self:GetHeight())/2);
 	self:SetBlendMode(Turbine.UI.BlendMode.Undefined);
 	self:SetText(EBLangData.OptionsWindow);
@@ -159,6 +159,29 @@ function OptionWindow:Constructor()
 	self.saveCallsLabel:SetPosition( ((self:GetWidth()-self.saveCallsLabel:GetWidth()+18)/2),250);
 	self.saveCallsToggle:SetPosition( self.saveCallsLabel:GetLeft()-18,252);
 
+	-- create the always load DWRA checkbox/label
+	if hasDWRA then
+		self.loadDWRALabel = ScalingLabel();
+		self.loadDWRALabel:SetMultiline(false);
+		self.loadDWRALabel:SetParent(self);
+		self.loadDWRALabel:SetFont(Turbine.UI.Lotro.Font.TrajanPro20);
+		self.loadDWRALabel:SetSize(10,20);
+		self.loadDWRALabel:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleCenter);
+		self.loadDWRALabel:SetText("Always Load DWRA");
+		self.loadDWRALabel:CalcSmallestWidth();
+		self.loadDWRALabel:SetPosition( ((self:GetWidth()-self.loadDWRALabel:GetWidth()+18)/2),290);		
+
+		self.loadDWRAToggle = Turbine.UI.Lotro.CheckBox();
+		self.loadDWRAToggle:SetCheckAlignment(Turbine.UI.ContentAlignment.MiddleCenter);
+		self.loadDWRAToggle:SetParent(self);
+		self.loadDWRAToggle:SetBackColor(Turbine.UI.Color( 0.1, 0.1, 0.1 ));
+		self.loadDWRAToggle:SetSize(16,16);
+		self.loadDWRAToggle:SetChecked(false);
+		self.loadDWRAToggle:SetText("");
+		self.loadDWRAToggle.CheckedChanged=function()
+		end
+		self.loadDWRAToggle:SetPosition( self.loadDWRALabel:GetLeft()-18,292);
+	end
 end
 
 function OptionWindow:Show()

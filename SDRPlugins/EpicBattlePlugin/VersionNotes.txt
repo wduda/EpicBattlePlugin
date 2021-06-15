@@ -1,0 +1,59 @@
+Version 1.5
+	1) Removed the API call to the player's party/fellowship, as this can cause a crash to desktop if a player running EpicBattlePlugin is added to the raid assist target window.
+	2) To confirm which size instance you are running for Hammer and Defense of Minas Tirith, a window appears asking you to select which size you are running.
+
+Version 1.4
+	1) Fixed a typo with the word "Defense" since LOTRO uses British English.
+	2) Added Minas Tirith epic battles.
+	3) Removed a chat printout in the Pelargir epic battles.
+	4) Deeping Wall - Raid will now display the 3rd quest once the 2nd wave has started.
+
+Version 1.31b
+	1) Fixed an issue with Plugin Comp and the thumbs.db file.
+	2) Note: No other changes were made to this version. The version number in game will not change.
+
+Version 1.31
+	1) Retaking Pelargir numbers are a bit more accurate. See notes above labeled "Isses with Retaking Pelargir".
+	2) Retaking Pelargir Fellowship now works correctly.
+	3) French translations added. Apologies for not adding these years ago, I had them sitting around and seemingly never got them in.
+	4) Note: Pelargir will not work on either French or German clients.
+
+Version 1.3
+	1) Retaking Pelargir is now recognized as an Epic Battle! The solo version is 95% complete, the Fellowship version timers are not yet correct, and may not work correctly either.
+	2) Within Pelargir, the EBP tracks the start of the side quest, main epic foe, and secondary epic foe for each "phase." The quest start timer countdown until the quest (or first epic foe if there is no quest) starts, and will then switch to counting down until the epic foe will start, then switch to countdown til when the secondary epic foe will start. Note that currently the timer simply goes to the next one even if the previous one hasn't actually happened yet (for example, when the quest start timer reaches 0, it then starts counting down until the epic foe spawns, even if the quest hasn't actually started). I plan to clean this up in a future build.
+	3) When a main/secondary epic foe is active, it will countdown how long you have until you lose platinum on that epic foe. Note that these timers ARE NOT CORRECT yet, and even once the "official" time goes in, they may not be 100% accurate.
+
+Version 1.2
+	1) Fixed an issue with Deeping-coomb not being recognized.
+
+Version 1.1
+	1) Added the Options Window
+	2) Fixed a few issues with the display.
+	3) Fixed other issues with the new options that has arisen since Av0.92
+	4) Fixed a few issues with the timers, kill counts, and quests.
+
+Version Alpha 0.92
+	1) Addressed an issue with the debugger that was causing problems with non-English clients. The debugger has been removed.
+	2) Fixed a few issues with the timers, kill counts, and quests.
+	3) Addressed a problem with the German translations.
+
+Version Alpha 0.91
+	1) Addressed an issue where the plugin location and minimized state were not being saved/loaded correctly (hopefully).
+	2) Fixed some wave callouts and main quest identifiers that were incorrect, causing the plugin to not work for those instances/waves.
+	3) Attempted to make the side quest timer more accurate. Still a WIP and Deeping Wall raid is completely bonked at this time.
+	4) Added German translations. Thanks to Burgus for the translations!
+	5) There are now some debugger tools you can check out for the epic battles you do. Type /ebp data to see the printout. This can be useful to find out what timers might be off, and can be sent to me to see what needs fixed . This may be removed in future releases.
+
+Version Alpha 0.9
+	1) Added ability for plugin to load minimized if it was minimized when last unloaded.
+	2) Fixed a bug where estimated kill counts were being added incorrectly.
+	3) Attempted to make Helm's Dike Fellowship timers more accurate.
+	4) Added Vindar Patch and a language data table to begin support for foreign clients. This may cause your saved settings to reset.
+
+Version Alpha 0.8
+	1) Added more options.
+	2) Fixed a few errors.
+	3) Added information on all Epic Battle instances so that the timers and quest timers are more or less correct.
+
+Version Alpha 0.5
+	1) Initial Alpha Release. Use at your own risk.

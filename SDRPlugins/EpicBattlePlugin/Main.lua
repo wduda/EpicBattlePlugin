@@ -4,6 +4,17 @@ import "Turbine.UI";
 import "Turbine.UI.Lotro";
 import "SDRPlugins.EpicBattlePlugin.ScalingLabel";
 import "SDRPlugins.EpicBattlePlugin.OptionsWindow";
+import "SDRPlugins.EpicBattlePlugin.ConfirmInstanceWindow";
+
+hasDWRA = false;
+
+local plugins = Turbine.PluginManager.GetAvailablePlugins();
+for k,v in pairs(plugins) do
+	if v["Name"] == "DeepingWallRaidAssistant" then
+		hasDWRA = true;
+		break;
+	end
+end
 
 -- safely add a callback without overwriting any existing ones
 function AddCallback(object, event, callback)
@@ -54,13 +65,33 @@ Turbine.Plugin.Load = function(self, sender, args)
 	Version = self:GetVersion();
 end
 
-Turbine.Plugin.Unload = function(self, sender, args)
+function unloadMe()
 	main:RemoveCallbacks();
 	-- save data
 	saveState();
 	-- do anything else needed
 	OptionWindow:Close();
+	if confirmHDSizeWindow ~= nil then
+		confirmHDSizeWindow:SetVisible(false);
+		confirmHDSizeWindow = nil;
+	end
 	collectgarbage();
+end
+
+isLoaded = false;
+unloadControl = Turbine.UI.Control();
+
+unloadControl.Update = function()
+	if not isLoaded then
+		unloadControl:SetWantsUpdates(false);
+		isLoaded = true;
+		Plugins["EpicBattlePlugin"].Unload = function(self, sender, args)
+			unloadMe();
+		end
+		if hasDWRA and OptionWindow.loadDWRAToggle:IsChecked() then
+			Turbine.PluginManager.LoadPlugin("DeepingWallRaidAssistant");
+		end
+	end
 end
 
 ---[[ create a new command line command for EBP options
@@ -87,7 +118,7 @@ if debuggingMode then
 	-- The Help text that outputs when /ebp is typed
 	help = "EpicBattlePlugin has the following command:\n" ..
 		"   data - prints out the data.\n" ..
-		"   delete - deletes EpicBattlePlugin saved data" ..
+		"   delete - deletes EpicBattlePlugin saved data\n" ..
 		"   options - shows the options for EBP";
 
 	function EBPCommand:GetHelp()
@@ -111,7 +142,7 @@ if debuggingMode then
 			end
 			if pastEpicBattles[battleIndex].waveInformation[i].actualEndTime ~= nil then
 				Turbine.Shell.WriteLine("      Actual Wave Duration: " .. round((pastEpicBattles[battleIndex].waveInformation[i].actualEndTime - pastEpicBattles[battleIndex].waveInformation[i].startTime), 0));
-		end
+			end
 			if pastEpicBattles[battleIndex].waveInformation[i].sideQuestKillCountStart ~= nil then
 				Turbine.Shell.WriteLine("      Actual Kill Count at Side Quest Start: " .. pastEpicBattles[battleIndex].waveInformation[i].sideQuestKillCountStart);
 			end
@@ -123,6 +154,9 @@ if debuggingMode then
 			end
 			if pastEpicBattles[battleIndex].waveInformation[i].delayCalc ~= nil then
 				Turbine.Shell.WriteLine("      Delay between wave start and first kill: " .. round(pastEpicBattles[battleIndex].waveInformation[i].delayCalc - pastEpicBattles[battleIndex].waveInformation[i].startTime));
+			end
+			if pastEpicBattles[battleIndex].waveInformation[i].sideQuestKillCountStart and pastEpicBattles[battleIndex].waveInformation[i].delayCalc ~= nil and pastEpicBattles[battleIndex].waveInformation[i].sideQuestTimeStart ~= nil then
+				Turbine.Shell.WriteLine("      Kill/time ratio: " .. round((pastEpicBattles[battleIndex].waveInformation[i].sideQuestKillCountStart) / ( (pastEpicBattles[battleIndex].waveInformation[i].sideQuestTimeStart - pastEpicBattles[battleIndex].waveInformation[i].delayCalc) ), 4));
 			end
 			if pastEpicBattles[battleIndex].waveInformation[i].hasEnded then
 				Turbine.Shell.WriteLine("      Wave successfully ended.");
@@ -157,3 +191,5 @@ else -- add /ebp options command for non-debugging versions
 	Turbine.Shell.AddCommand( "ebp", EBPCommand );
 end
 --]]--
+
+unloadControl:SetWantsUpdates(true);

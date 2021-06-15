@@ -1,35 +1,35 @@
 EBLangData = {}
 
-EBLangData.EpicBattleHeader = "Epic Battle Plugin";
-EBLangData.WaveLabel = "Waves:";
-EBLangData.Wave1Label = "1st";
-EBLangData.Wave2Label = "2nd";
-EBLangData.Wave3Label = "3rd";
-EBLangData.InfoLabel = "This information is not exact.";
-EBLangData.EndsIn = "Ends In: ";
-EBLangData.KillCount = "Kill Count: ";
-EBLangData.TilSideQuestStarts = "til Side Quest Starts: ";
-EBLangData.QuestLabel = "Quests";
-EBLangData.FirstQuestLabel = "1st Quest: ";
-EBLangData.SecondQuestLabel = "2nd Quest: ";
-EBLangData.ThirdQuestLabel = "3rd Quest: ";
-EBLangData.RandomQuest = "Random Quest - Hover for Details";
-EBLangData.UnknownQuest = "Not Yet Known - Hover for Details";
-EBLangData.QuestName = "QUEST NAME";
-EBLangData.TrapsLabel = "Traps:";
-EBLangData.NoneLabel = "None";
-EBLangData.NotYetKnown = "Not Yet Known";
-EBLangData.Soon = "SOON!";
-EBLangData.PotentialQuests = "Potential Quests";
-EBLangData.StartNewEpicBattle = "Start ";
-EBLangData.StartNewWave = "Start New Wave: ";
-EBLangData.MenuWesternSide = "Western Side";
-EBLangData.MenuEasternSide = "Eastern Side";
-EBLangData.MenuHornburg = "Hornburg";
-EBLangData.MenuGlitteringCaves = "Glittering Caves";
-EBLangData.MenuCentreSide = "Centre Side";
-EBLangData.MenuOnlySide = "Start New Wave";
-EBLangData.MenuEndWave = "End Current Wave";
+EBLangData.EpicBattleHeader = "Batailles Epiques Plugin";
+EBLangData.WaveLabel = "Vagues:";
+EBLangData.Wave1Label = "1ere";
+EBLangData.Wave2Label = "2nde";
+EBLangData.Wave3Label = "3eme";
+EBLangData.InfoLabel = "Cette information n'est pas exacte.";
+EBLangData.EndsIn = "Terminé dans : ";
+EBLangData.KillCount = "Nombres de tués: ";
+EBLangData.TilSideQuestStarts = "La quête commence dans : ";
+EBLangData.QuestLabel = "Quêtes";
+EBLangData.FirstQuestLabel = "1ere Quête : ";
+EBLangData.SecondQuestLabel = "2nde Quête : ";
+EBLangData.ThirdQuestLabel = "3eme Quête : ";
+EBLangData.RandomQuest = "Quête aléatoire - Survoler pour détails";
+EBLangData.UnknownQuest = "Pas encore connu - Survoler pour détails";
+EBLangData.QuestName = "Nom de la quête";
+EBLangData.TrapsLabel = "Pièges:";
+EBLangData.NoneLabel = "Aucun";
+EBLangData.NotYetKnown = "Pas encore connu";
+EBLangData.Soon = "Bientôt !";
+EBLangData.PotentialQuests = "Quêtes possibles";
+EBLangData.StartNewEpicBattle = "Commencer ";
+EBLangData.StartNewWave = "Commencer nouvelle vague: ";
+EBLangData.MenuWesternSide = "Côté Ouest";
+EBLangData.MenuEasternSide = "Côté Est";
+EBLangData.MenuHornburg = "Fort le Cor";
+EBLangData.MenuGlitteringCaves = "Cavernes étincelantes";
+EBLangData.MenuCentreSide = "Centre";
+EBLangData.MenuOnlySide = "Commencer nouvelle vague";
+EBLangData.MenuEndWave = "Terminer vague en cours";
 
 -- Pel stuff
 EBLangData.MenuPhase1 = "Phase 1";
@@ -41,14 +41,14 @@ EBLangData.TilEpicFoe = "til Epic Foe: ";
 EBLangData.TilSecondaryFoe = "til Secondary Foe: ";
 
 -- Need translations for all epic battle instances, use following format
-EBLangData["Helm's Dike - Solo/Duo"] = "Helm's Dike - Solo/Duo";
-EBLangData["Helm's Dike - Fellowship"] = "Helm's Dike - Fellowship";
-EBLangData["Deeping Wall - Solo/Duo"] = "Deeping Wall - Solo/Duo";
-EBLangData["Deeping Wall - Raid"] = "Deeping Wall - Raid";
-EBLangData["The Deeping-coomb - Solo/Duo"] = "The Deeping-coomb - Solo/Duo";
-EBLangData["Glittering Caves - Solo/Duo"] = "Glittering Caves - Solo/Duo";
-EBLangData["Glittering Caves - Small Fellowship"] = "Glittering Caves - Small Fellowship";
-EBLangData["The Hornburg - Solo/Duo"] = "The Hornburg - Solo/Duo";
+EBLangData["Helm's Dike - Solo/Duo"] = "Fossé de Helm - Solo/Duo";
+EBLangData["Helm's Dike - Fellowship"] = "Fossé de Helm - Communauté";
+EBLangData["Deeping Wall - Solo/Duo"] = "Mur du Gouffre - Solo/Duo";
+EBLangData["Deeping Wall - Raid"] = "Mur du Gouffre - Raid";
+EBLangData["The Deeping-coomb - Solo/Duo"] = "Combe du Gouffre - Solo/Duo";
+EBLangData["Glittering Caves - Solo/Duo"] = "Cavernes étincelantes - Solo/Duo";
+EBLangData["Glittering Caves - Small Fellowship"] = "Cavernes étincelantes - petite communauté";
+EBLangData["The Hornburg - Solo/Duo"] = "Fort le Cor - Solo/Duo";
 EBLangData["Retaking Pelargir - Solo/Duo"] = "Retaking Pelargir - Solo/Duo";
 EBLangData["Retaking Pelargir - Fellowship"] = "Retaking Pelargir - Fellowship";
 -- added 1/2/16 for Minas Tirith update
@@ -58,37 +58,37 @@ EBLangData["Hammer of the Underworld - Solo/Duo"] = "Hammer of the Underworld - 
 EBLangData["Hammer of the Underworld - Fellowship"] = "Hammer of the Underworld - Fellowship";
 
 -- Need translations for all side quests, use following format
-EBLangData["Stone Obstruction"] = "Stone Obstruction";
-EBLangData["Guarding the Watchtower"] = "Guarding the Watchtower";
-EBLangData["Guarding the Watchtowers"] = "Guarding the Watchtowers";
-EBLangData["Protect the Horses"] = "Protect the Horses";
-EBLangData["Statue of Helm Hammerhand"] = "Statue of Helm Hammerhand";
-EBLangData["Powder at the Gate"] = "Powder at the Gate";
-EBLangData["Flames at the Gate"] = "Flames at the Gate";
-EBLangData["Breaching the Hornburg"] = "Breaching the Hornburg";
-EBLangData["Securing the Culvert"] = "Securing the Culvert";
-EBLangData["The Vanguard Defilers"] = "The Vanguard Defilers";
-EBLangData["Vandals in the Tower"] = "Vandals in the Tower";
-EBLangData["Shells in the Air"] = "Shells in the Air";
-EBLangData["Assault on the East Tower"] = "Assault on the East Tower";
-EBLangData["A Flanking Foe"] = "A Flanking Foe";
-EBLangData["Bred for Battle"] = "Bred for Battle";
-EBLangData["Siege Under Fire"] = "Siege Under Fire";
-EBLangData["Searching the Debris"] = "Searching the Debris";
-EBLangData["Defilers in the Water"] = "Defilers in the Water";
-EBLangData["A Pillage Denied"] = "A Pillage Denied";
-EBLangData["Prepare to Fall Back"] = "Prepare to Fall Back";
-EBLangData["Stalactites Over the Bridge"] = "Stalactites Over the Bridge";
-EBLangData["Bombs and Bats"] = "Bombs and Bats";
-EBLangData["Cave In"] = "Cave In";
-EBLangData["Spider Assault"] = "Spider Assault";
-EBLangData["Civilian Defence"] = "Civilian Defence";
-EBLangData["Preparing the Charge"] = "Preparing the Charge";
-EBLangData["Protecting the Gatehouse"] = "Protecting the Gatehouse";
-EBLangData["Bringing Down the Siege Ladders"] = "Bringing Down the Siege Ladders";
-EBLangData["Repair the Portcullis"] = "Repair the Portcullis";
-EBLangData["Winches in the Windows"] = "Winches in the Windows";
-EBLangData["The Final Blockade"] = "The Final Blockade";
+EBLangData["Stone Obstruction"] = "Une obstruction rocheuse";
+EBLangData["Guarding the Watchtower"] = "La défense de la tour de garde";
+EBLangData["Guarding the Watchtowers"] = "La défense de la tour de garde";
+EBLangData["Protect the Horses"] = "Protéger les chevaux";
+EBLangData["Statue of Helm Hammerhand"] = "La statue de Helm Poing de marteau";
+EBLangData["Powder at the Gate"] = "De la poudre aux portes";
+EBLangData["Flames at the Gate"] = "Des Flammes aux portes";
+EBLangData["Breaching the Hornburg"] = "L’infiltration de Fort-le-Cor";
+EBLangData["Securing the Culvert"] = "Sécuriser le ponceau";
+EBLangData["The Vanguard Defilers"] = "Les profanateurs de l’avant garde";
+EBLangData["Vandals in the Tower"] = "Des vandales dans la tour";
+EBLangData["Shells in the Air"] = "Des obus dans l’air";
+EBLangData["Assault on the East Tower"] = "L’assaut de la tour est";
+EBLangData["A Flanking Foe"] = "Un ennemi flanqueur";
+EBLangData["Bred for Battle"] = "Élevés pour le combat";
+EBLangData["Siege Under Fire"] = "Sous le feu de l’ennemi";
+EBLangData["Searching the Debris"] = "Fouiller les décombres";
+EBLangData["Defilers in the Water"] = "Des profanateurs dans l’eau";
+EBLangData["A Pillage Denied"] = "Privés de pillage";
+EBLangData["Prepare to Fall Back"] = "Repli imminent";
+EBLangData["Stalactites Over the Bridge"] = "Stalactites au dessus du pont";
+EBLangData["Bombs and Bats"] = "Des bombes et des chauves souris";
+EBLangData["Cave In"] = "Éboulement";
+EBLangData["Spider Assault"] = "Araignées à l’assaut";
+EBLangData["Civilian Defense"] = "Défense civile";
+EBLangData["Preparing the Charge"] = "Préparer la charge";
+EBLangData["Protecting the Gatehouse"] = "Protéger le poste de garde";
+EBLangData["Bringing Down the Siege Ladders"] = "Que tombent les échelles de siège";
+EBLangData["Repair the Portcullis"] = "La réparation de la herse";
+EBLangData["Winches in the Windows"] = "Des treuils aux fenêtres";
+EBLangData["The Final Blockade"] = "La dernière ligne de défense";
 -- Pel stuff - these are for DISPLAY purposes, do not include delimiters
 EBLangData["Archer Thisarti"] = "Archer Thisarti";
 EBLangData["Backs to the Wall"] = "Backs to the Wall";
@@ -116,22 +116,21 @@ EBLangData["Beasts of Harad"] = "Beasts of Harad";
 EBLangData["Despair in the Streets"] = "Despair in the Streets";
 
 -- Need traps translations, these should match exactly how they are in game
-EBLangData.BearTrap = "Bear";
-EBLangData.Caltrop = "Caltrop";
-EBLangData.Tripwire = "Tripwire";
-EBLangData.TrapCombatChat = "applied a .*benefit.* with Trap"; -- the .* capture the color codes that you can't see in game
+EBLangData.BearTrap = "Ours";
+EBLangData.Caltrop = "Chausse%-trappe";
+EBLangData.Tripwire = "Fil de détente.";
+EBLangData.TrapCombatChat = "appliqué un .*avantage.* avec un piège"; -- the .* capture the color codes that you can't see in game
 
 -- Need main quest translations - these must match exactly how they appear in the chat in game
-EBLangData.HelmsDike = "New Quest: Helm's Dike";
-EBLangData.GlitteringCaves = "New Quest: The Glittering Caves";
-EBLangData.DeepingWall = "New Quest: The Deeping Wall";
-EBLangData.DeepingCoomb = "New Quest: The Deeping%-coomb";
-EBLangData.Hornburg = "New Quest: The Hornburg";
+EBLangData.HelmsDike = "Nouvelle quête*: Le Fossé de Helm";
+EBLangData.GlitteringCaves = "Nouvelle quête*: Les cavernes étincelantes";
+EBLangData.DeepingWall = "Nouvelle quête*: Le mur du gouffre";
+EBLangData.DeepingCoomb = "Nouvelle quête*: La combe du gouffre";
+EBLangData.Hornburg = "Nouvelle quête*: Fort-le-Cor";
 EBLangData.RetakingPelargir = "New Quest: Retaking Pelargir";
 -- added 1/2/16 for Minas Tirith update
 EBLangData.HammerMinasTirith = "New Quest: Hammer of the Underworld";
 EBLangData.DefenceMinasTirith = "New Quest: The Defence of Minas Tirith";
-
 -- these are for the searchable version of the quest names - need to include delimiters
 EBLangData.PelSearchableQuest = {};
 EBLangData.PelSearchableQuest["Kang-kethek the Sorcerer"] = "Kang%-kethek the Sorcerer";
@@ -144,7 +143,6 @@ EBLangData.PelSearchableQuest["Backs to the Wall"] = "Backs to the Wall";
 EBLangData.PelSearchableQuest["Parade of Thieves"] = "Parade of Thieves";
 EBLangData.PelSearchableQuest["The Ship-slaves"] = "The Ship%-slaves";
 EBLangData.PelSearchableQuest["The Thrice-blown Horn"] = "The Thrice%-blown Horn";
-
 -- added 1/2/16 for Minas Tirith update
 -- these are for the searchable version of the epic foe quest names - need to include delimiters
 EBLangData.MTSearchableQuest = {};
@@ -154,24 +152,23 @@ EBLangData.MTSearchableQuest["Epic Foe: Raghathai, Faramir's Bane"] = "Epic Foe:
 EBLangData.MTSearchableQuest["Epic Foe: Ahartal, Hand of the First Blade"] = "Epic Foe: Ah.-rtal, Hand of the First Blade";
 
 -- Need in-game translations of these keywords to determine if the main quest is a Small Fellowship, Fellowship, or Raid
-EBLangData.Fellowship = "Fellowship";
-EBLangData.SmallFellowship = "Small";
+EBLangData.Fellowship = "Communauté";
+EBLangData.SmallFellowship = "Petite communauté";
 EBLangData.Raid = "Raid";
 
 -- Need in-game translations of these keywords to determine when an enemy has been defeated
-EBLangData.Defeated = "defeated";
-EBLangData.Warrior = "Warrior";
+EBLangData.Defeated = "a vaincu";
+EBLangData.Warrior = "Guerrier";
 EBLangData.Berserker = "Berserker";
 EBLangData.Archer = "Archer";
-EBLangData.Sapper = "Sapper";
-EBLangData.Commander = "Commander";
+EBLangData.Sapper = "Sapeur";
+EBLangData.Commander = "Commandant";
 EBLangData.CorsairRaider = "Corsair Raider";
 EBLangData.HaradrimMarksman = "Haradrim Marksman";
 EBLangData.HaradrimMarauder = "Haradrim Marauder";
 EBLangData.HalftrollCrusher = "Half%-troll Crusher";
 EBLangData.CorsairCaptain = "Corsair Captain";
 EBLangData.HaradrimSorcerer = "Haradrim Sorcerer";
-
 -- add 1/2/16 for Minas Tirith update
 EBLangData.SuhalarReaver = "S.-halar Reaver";
 EBLangData.SuhalarAxeThrower = "S.-halar Axe.Thrower";
@@ -196,34 +193,34 @@ EBLangData.SecondPelFoe = "Black Numenorean Zagar.-th has joined the troops flee
 
 -- Need in-game translations to see which side is being attacked, when a wave ends, etc. Must exactly match.
 -- In Helm's Dike:
-EBLangData.EasternEnd = "eastern end";
-EBLangData.WesternEnd = "western end";
-EBLangData.HDCentre = "They are coming down the centre";
-EBLangData.HDWaveEnding1 = "They are thinning. We will soon have a break. Make the best of it";
-EBLangData.HDWaveEnding2 = "Their main force marches. Fall back!";
+EBLangData.EasternEnd = "Gamelin lance un appel*: 'Ils avancent du côté est du Fossé*!";
+EBLangData.WesternEnd = "Gamelin lance un appel*: 'Ils avancent du côté ouest du Fossé*!";
+EBLangData.HDCentre = "Ils avancent par le centre, droit vers la porte principale*!";
+EBLangData.HDWaveEnding1 = "Ils commencent à céder. Nous aurons bientôt une ouverture. Profitez-en*!";
+EBLangData.HDWaveEnding2 = "Leurs forces principales avancent. Repliez-vous*! A Fort-le-Cor*!";
 -- In Glittering Caves:
-EBLangData.EasternTunnel = "eastern tunnel";
-EBLangData.WesternIsland = "western island";
-EBLangData.GCCentre = "Defend the women and children, they come for the centre";
-EBLangData.GCWaveEnding1 = "They are thinning. We will soon have a break. Make the best of it";
-EBLangData.GCWaveEnding2 = "Fall back to the centre. The women and children must be protected";
-EBLangData.GCWaveEnding3 = "We have driven them back";
+EBLangData.EasternTunnel = "J'ai besoin d'aide dans les tunnels à l'est*!";
+EBLangData.WesternIsland = "Besoin d'aide sur l'île à l'ouest*!";
+EBLangData.GCCentre = "Défendez les femmes et les enfants, ils arrivent par le centre*!";
+EBLangData.GCWaveEnding1 = "Ils commencent à céder. Nous aurons bientôt une ouverture. Profitez-en*!";
+EBLangData.GCWaveEnding2 = "Repliez-vous au centre. Les femmes et les enfants doivent être protégés*!";
+EBLangData.GCWaveEnding3 = "Nous les avons repoussés*!";
 --Deeping Wall Solo/Raid
-EBLangData.DWStart1 = "Prepare yourself, our enemy approaches! They have catapults";
+EBLangData.DWStart1 = "Préparez-vous, notre ennemi approche ! Ils ont des catapultes !";
 EBLangData.DWStart2 = "The battle will soon be rejoined. They come again! More siege approaches";
 EBLangData.EasternWall = "eastern wall";
 EBLangData.WesternWall = "western wall";
 EBLangData.CentreWall = "They are attacking the centre of the wall!";
 EBLangData.DWWaveEnding1 = "It looks like we shall soon have a respite. Use it wisely";
-EBLangData.DWWaveEnding2 = "Clear the wall! They're going to blow it";
+EBLangData.DWWaveEnding2 = "Evacuez le mur*! Ils vont le faire exploser*!";
 -- Deeping-coomb
 EBLangData.HornburgSide = "They march towards the Hornburg";
-EBLangData.GlitteringSide = "They are heading towards the Glittering Caves";
+EBLangData.GlitteringSide = "Ils se dirigent vers les Cavernes Etincelantes*!";
 EBLangData.DCWaveEnding1 = "The coming respite will not last long";
 EBLangData.DCWaveEnding2 = "We cannot hold here, they number too many. Retreat";
 -- Hornburg
-EBLangData.HBStart = "The enemy is massing and preparing his assault. Ready your defences";
-EBLangData.HBWaveEnding = "They are thinning. We will soon have a break. Make the best of it";
+EBLangData.HBStart = "L'ennemi se regroupe et prépare son assaut. Préparez les défenses*!";
+EBLangData.HBWaveEnding = "Ils commencent à céder. Nous aurons bientôt une ouverture. Profitez-en*!";
 -- Pelargir
 EBLangData.PelPhase1Start = "We've drawn attention. Defend the winch!";
 EBLangData.PelPhase1End = "Stage Complete. Merit Awarded.";
@@ -240,14 +237,13 @@ EBLangData.DefencePhase1Start = "Mithrandir! You have come just in time!";
 EBLangData.DefencePhase1End = "We must move now to aid the other defenders! The hope of Gondor cannot falter!";
 EBLangData.DefencePhase2End = "Our foes have ceased their attack! Men, repair what you can and make ready for the next assault!";
 
--- some Pel stuff
 EBLangData.PelQuest = "Quest: ";
 EBLangData.PelEpicFoe = "Epic Foe: ";
 EBLangData.PelSecondaryFoe = "Secondary Epic Foe: ";
 EBLangData.PelHoverForDetails = "Hover for Details";
 
 -- Need in game translations to see when the players enters a chat channel - this means they have left the epic battle instance
-EBLangData.EnteredChatChannel = "Entered the .- channel";
+EBLangData.EnteredChatChannel = "Entrer le .- canal";
 
 -- Translation for shorthand "Not Available" - N/A
 EBLangData.NotAvailable = "N/A";
@@ -257,13 +253,13 @@ EBLangData.SecondsToKill = "seconds to kill";
 
 EBLangData.OptionsCommand = "options"; -- used to type /ebp options to bring up the options panel
 EBLangData.HelpOutput = "EpicBattlePlugin has the following command:\n   options: Opens up the EBP options panel."; -- options should match the above
-EBLangData.Opacity = "Opacity";
-EBLangData.AlwaysLoadMin = "Always Load Minimized";
-EBLangData.ScaleWindow = "Scale Window";
+EBLangData.Opacity = "Opacité";
+EBLangData.AlwaysLoadMin = "Toujours chargé réduit";
+EBLangData.ScaleWindow = "Taille Fenêtre";
 
-EBLangData.OptionsMenu = "Show Options";
-EBLangData.MinAfterBattle = "Minimize Window After Battle";
-EBLangData.MaxForBattle = "Maximize Window for Battle";
+EBLangData.OptionsMenu = "Voir Options";
+EBLangData.MinAfterBattle = "Minimiser fenêtre après la bataille";
+EBLangData.MaxForBattle = "Maximizer fenêtre durant la bataille";
 
-EBLangData.OptionsWindow = "Options Window";
+EBLangData.OptionsWindow = "Fenêtre options";
 EBLangData.SaveCalls = "Make Additional Save Calls";

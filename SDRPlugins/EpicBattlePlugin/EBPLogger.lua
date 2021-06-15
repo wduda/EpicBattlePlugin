@@ -2,32 +2,15 @@
 function chatParser(sender, args)
 	-- check for certain things in chat here
 	--[[ eventually I'd like to split this into different chat parsers so it isn't doing all of it in one function
-		For example, have the main chat parser look for the instance starting, then once it has been found,
+		For example, have the main chat parser look for the instance starting, then once it has been found, 
 		load the chat parser that will work for that instance. Separate chat parsers into Quest finder, wave callouts,
-		deaths, etc. This way each time an unfiltered chat event happens, it doesn't have to check 10 different
+		deaths, etc. This way each time an unfiltered chat event happens, it doesn't have to check 10 different 
 		callouts to see if they match.
 	--]]
 
 	-- check to find quests, such as the main quest and side quests
 	if args.ChatType == Turbine.ChatType.Quest then
-	
-		if ebObj ~= nil then
-			if ebObj.spaceName == "Retaking Pelargir - Solo/Duo" then
-				if (args.Message:find(EBLangData.RPStart, 1, true) ~= nil) and (ebObj.currentWave>1) then
---					waveHasStarted("Only");
-				elseif (args.Message:find(EBLangData.RPWaveEnding, 1, true) ~= nil) then
-					waveHasEnded();
-					if (ebObj ~= nil) then						
-						if (ebObj.currentWave ~= nil) and (ebObj.waves ~= nil)  then
-							if ebObj.currentWave<=ebObj.waves then
-								waveHasStarted("Only");
-							end	
-						end						
-					end
-				end
-			end				
-		end
-		
+
 		if(args.Message:find(EBLangData.HelmsDike) ~= nil) then
 			if(args.Message:find(EBLangData.Fellowship) ~= nil) then
 				setUpEBObj("Helm's Dike - Fellowship");
@@ -58,83 +41,148 @@ function chatParser(sender, args)
 		elseif(args.Message:find(EBLangData.Hornburg) ~= nil) then
 			-- it's the Hornburg solo space
 			setUpEBObj("The Hornburg - Solo/Duo");
-
-		elseif(args.Message:find(EBLangData.Retaking) ~= nil) then
-			-- it's the Retaking Pelargir solo space
-			setUpEBObj("Retaking Pelargir - Solo/Duo");
-		-- finds side quests when they start (won't need once the logging is no longer needed)
-		elseif(args.Message:find("New Quest:") ~= nil) then
-			if ebObj ~= nil then			
-				if ebObj.waveInformation[ebObj.currentWave] ~= nil then
-					ebObj.waveInformation[ebObj.currentWave].sideQuestKillCountStart = ebObj.waveInformation[ebObj.currentWave].killCount;
-					ebObj.waveInformation[ebObj.currentWave].sideQuestEstKillCountStart = ebObj.waveInformation[ebObj.currentWave].estKillCount;
-					ebObj.waveInformation[ebObj.currentWave].sideQuestTimeStart = Turbine.Engine:GetGameTime();
-					
-					for key, value in pairs(EpicBattleData[ebObj.spaceName].sides) do						
-						if EpicBattleData[ebObj.spaceName].sides[key].wave[ebObj.currentWave] ~= nil then
-							for questIndex = 1, #EpicBattleData[ebObj.spaceName].sides[key].wave[ebObj.currentWave] do
-								if EBLangData[EpicBattleData[ebObj.spaceName].sides[key].wave[ebObj.currentWave][questIndex]] ~= nil then
-									if args.Message:find(EBLangData[EpicBattleData[ebObj.spaceName].sides[key].wave[ebObj.currentWave][questIndex]]) ~= nil then
-										RandomQuestData = {};
-										RandomQuestData["spaceName"] = ebObj.spaceName;
-										RandomQuestData["wave"] = ebObj.currentWave;
-										RandomQuestData["quest"] = EBLangData[EpicBattleData[ebObj.spaceName].sides[key].wave[ebObj.currentWave][questIndex]];
-										RandomQuestData["detail"] = EBLangData["detailed"][ebObj.spaceName][EBLangData[EpicBattleData[ebObj.spaceName].sides[key].wave[ebObj.currentWave][questIndex]]];
-										updateUI();
-									end
+			
+		elseif(args.Message:find(EBLangData.RetakingPelargir) ~= nil) then
+			if(args.Message:find(EBLangData.Fellowship) ~= nil) then
+				-- it's Pelargir fellowship
+				setUpEBObj("Retaking Pelargir - Fellowship");
+			else -- it's the Pelargir solo
+				setUpEBObj("Retaking Pelargir - Solo/Duo");
+			end
+		
+		-- Minas Tirith fix (1/2/16)
+		elseif(args.Message:find(EBLangData.HammerMinasTirith) ~= nil) then
+			-- it's Hammer of the Underworld, need to figure out if it's a solo or non-solo instance
+			if confirmHDSizeWindow ~= nil then
+				confirmHDSizeWindow:SetVisible(false);
+				confirmHDSizeWindow = nil;
+			end
+			confirmHDSizeWindow = ConfirmInstanceWindow(EBLangData.HammerMinasTirith);
+			confirmHDSizeWindow:Show();
+			
+--			if(Turbine.Gameplay.LocalPlayer:GetInstance():GetParty() ~= nil) then -- the player is in a fellowship, it may be duo or not
+--				if(Turbine.Gameplay.LocalPlayer:GetInstance():GetParty():GetMemberCount() > 2) then -- there are more than 2 players in the group, it is the non-solo version
+--					setUpEBObj("Hammer of the Underworld - Fellowship");
+--				else -- there are 2 players in the fellowship, it is the solo version
+--					setUpEBObj("Hammer of the Underworld - Solo/Duo");
+--				end
+--			else -- the player is not in a party, thus it is a solo instance
+--				setUpEBObj("Hammer of the Underworld - Solo/Duo");
+--			end
+			
+		-- Minas Tirith fix (1/2/16)
+		elseif(args.Message:find(EBLangData.DefenceMinasTirith) ~= nil) then
+			-- it's The Defence of Minas Tirith, need to figure out if it's a solo or non-solo instance
+			if confirmHDSizeWindow ~= nil then
+				confirmHDSizeWindow:SetVisible(false);
+				confirmHDSizeWindow = nil;
+			end
+			confirmHDSizeWindow = ConfirmInstanceWindow(EBLangData.DefenceMinasTirith);
+			confirmHDSizeWindow:Show();
+			
+--			if(Turbine.Gameplay.LocalPlayer:GetInstance():GetParty() ~= nil) then -- the player is in a fellowship, it may be duo or not
+--				if(Turbine.Gameplay.LocalPlayer:GetInstance():GetParty():GetMemberCount() > 2) then -- there are more than 2 players in the group, it is the non-solo version
+--					setUpEBObj("The Defence of Minas Tirith - Small Fellowship");
+--				else -- there are 2 players in the fellowship, it is the solo version
+--					setUpEBObj("The Defence of Minas Tirith - Solo/Duo");
+--				end
+--			else -- the player is not in a party, thus it is a solo instance
+--				setUpEBObj("The Defence of Minas Tirith - Solo/Duo");
+--			end
+			
+		-- Pel/MT to find when epic foes appear and start the timer
+		elseif args.Message:find(EBLangData.NewQuest) ~= nil then
+			if ebObj ~= nil then
+				if ebObj.spaceName == "Retaking Pelargir - Solo/Duo" or ebObj.spaceName == "Retaking Pelargir - Fellowship" then
+					if ebObj.waveInformation[ebObj.currentWave] ~= nil then
+						local isQuest = true;
+						for foes = 1, #EpicBattleData[ebObj.spaceName].sides[ebObj.waveInformation[ebObj.currentWave].side].wave[ebObj.currentWave].epicFoes do
+							--Turbine.Shell.WriteLine(EpicBattleData[ebObj.spaceName].sides[ebObj.waveInformation[ebObj.currentWave].side].wave[ebObj.currentWave].epicFoes[foes].name);
+							if args.Message:find(EBLangData.PelSearchableQuest[EpicBattleData[ebObj.spaceName].sides[ebObj.waveInformation[ebObj.currentWave].side].wave[ebObj.currentWave].epicFoes[foes].name]) ~= nil then
+								ebObj.waveInformation[ebObj.currentWave].killEndTime = Turbine.Engine:GetGameTime() + EpicBattleData[ebObj.spaceName].sides[ebObj.waveInformation[ebObj.currentWave].side].wave[ebObj.currentWave].epicFoes[foes].timeToKill;
+								ebObj.waveInformation[ebObj.currentWave].isEpicFoe = 2;
+								ebObj.waveInformation[ebObj.currentWave].foeName = EpicBattleData[ebObj.spaceName].sides[ebObj.waveInformation[ebObj.currentWave].side].wave[ebObj.currentWave].epicFoes[foes].name;
+								ebObj.waveInformation[ebObj.currentWave].part = 2;
+								
+								isQuest = false;
+								
+								-- if we're debugging stuff, add the start time of the epic foe
+								if debuggingMode then
+									ebObj.waveInformation[ebObj.currentWave].epicFoeKillCountStart = ebObj.waveInformation[ebObj.currentWave].killCount;
+									ebObj.waveInformation[ebObj.currentWave].epicFoeEstKillCountStart = ebObj.waveInformation[ebObj.currentWave].estKillCount;
+									ebObj.waveInformation[ebObj.currentWave].epicFoeTimeStart = Turbine.Engine:GetGameTime();
 								end
 							end
 						end
-					end
-				end
-			end
-		end
-	elseif ebObj ~= nil then -- prevents errors when running EBP while not in an EB
-	
-		-- Trap
-		if args.ChatType == Turbine.ChatType.PlayerCombat then
-			local trapStartIndex, trapEndIndex = args.Message:find(EBLangData.TrapCombatChat, 1, false);
-			if trapEndIndex ~= nil then
-				if args.Message:find(EBLangData.BearTrap, 1, true) then
-					table.insert(trapsTable, TrapObject(EBLangData.BearTrap, Turbine.Engine:GetGameTime()));
-				elseif args.Message:find(EBLangData.Tripwire, 1, true) then
-					table.insert(trapsTable, TrapObject(EBLangData.Tripwire, Turbine.Engine:GetGameTime()));
-				else
-					table.insert(trapsTable, TrapObject(EBLangData.Caltrop, Turbine.Engine:GetGameTime()));
-				end
-				updateUI();
-			end
-		end	
-	
-		if ebObj.currentWave ~= 0 and (not ebObj.waveInformation[ebObj.currentWave].hasEnded) then
-			if args.ChatType == Turbine.ChatType.Advancement then 
-				if (args.Message:find("Awarding") ~= nil) then
-					if (args.Message:find(ebObj.spaceName) == nil) then	-- if not the insta reward
-						if (args.Message:find("Bronze Medal") ~= nil) then
-							ebObj.waveInformation[ebObj.currentWave].Reward = 1;
-							setQuestReward(ebObj.currentWave, 1);
-						elseif (args.Message:find("Silver Medal") ~= nil) then
-							ebObj.waveInformation[ebObj.currentWave].Reward = 2;
-							setQuestReward(ebObj.currentWave, 2);
-						elseif (args.Message:find("Gold Medal") ~= nil) then
-							ebObj.waveInformation[ebObj.currentWave].Reward = 3;
-							setQuestReward(ebObj.currentWave, 3);
-						elseif (args.Message:find("Platinum Medal") ~= nil) then
-							ebObj.waveInformation[ebObj.currentWave].Reward = 4;
-							setQuestReward(ebObj.currentWave, 4);
+						
+						if isQuest then
+							ebObj.waveInformation[ebObj.currentWave].part = 1;
+							
+							if debuggingMode then
+								ebObj.waveInformation[ebObj.currentWave].sideQuestKillCountStart = ebObj.waveInformation[ebObj.currentWave].killCount;
+								ebObj.waveInformation[ebObj.currentWave].sideQuestEstKillCountStart = ebObj.waveInformation[ebObj.currentWave].estKillCount;
+								ebObj.waveInformation[ebObj.currentWave].sideQuestTimeStart = Turbine.Engine:GetGameTime();
+							end
 						end
-						setQuestReward(ebObj.currentWave, ebObj.waveInformation[ebObj.currentWave].Reward)						
+					end
+				
+				-- Minas Tirith fix (1/2/16)
+				elseif ebObj.spaceName == "The Defence of Minas Tirith - Solo/Duo" or ebObj.spaceName == "The Defence of Minas Tirith - Small Fellowship" or ebObj.spaceName == "Hammer of the Underworld - Solo/Duo" or ebObj.spaceName == "Hammer of the Underworld - Fellowship" then
+					-- determine if the side quest is an epic foe, and set the kill timer if so
+					if ebObj.waveInformation[ebObj.currentWave] ~= nil then
+						for questIndex = 1, #EpicBattleData[ebObj.spaceName].sides[ebObj.waveInformation[ebObj.currentWave].side].wave[ebObj.currentWave] do
+							local questName = EpicBattleData[ebObj.spaceName].sides[ebObj.waveInformation[ebObj.currentWave].side].wave[ebObj.currentWave][questIndex];
+							if(EBLangData.MTSearchableQuest[questName] ~= nil and args.Message:find(EBLangData.MTSearchableQuest[questName]) ~= nil) then
+								ebObj.waveInformation[ebObj.currentWave].killEndTime = Turbine.Engine:GetGameTime() + EpicBattleData[ebObj.spaceName].sides[ebObj.waveInformation[ebObj.currentWave].side].wave[ebObj.currentWave].epicFoes[questName].timeToKill;
+								ebObj.waveInformation[ebObj.currentWave].foeName = EpicBattleData[ebObj.spaceName].sides[ebObj.waveInformation[ebObj.currentWave].side].wave[ebObj.currentWave].epicFoes[questName].name;
+							end
+						end
+						
+						-- if we're debugging stuff, add the start time of the epic foe
+						if debuggingMode then
+							ebObj.waveInformation[ebObj.currentWave].sideQuestKillCountStart = ebObj.waveInformation[ebObj.currentWave].killCount;
+							ebObj.waveInformation[ebObj.currentWave].sideQuestEstKillCountStart = ebObj.waveInformation[ebObj.currentWave].estKillCount;
+							ebObj.waveInformation[ebObj.currentWave].sideQuestTimeStart = Turbine.Engine:GetGameTime();
+						end
+					end
+				
+				elseif debuggingMode then
+					if ebObj.waveInformation[ebObj.currentWave] ~= nil then
+						ebObj.waveInformation[ebObj.currentWave].sideQuestKillCountStart = ebObj.waveInformation[ebObj.currentWave].killCount;
+						ebObj.waveInformation[ebObj.currentWave].sideQuestEstKillCountStart = ebObj.waveInformation[ebObj.currentWave].estKillCount;
+						ebObj.waveInformation[ebObj.currentWave].sideQuestTimeStart = Turbine.Engine:GetGameTime();
 					end
 				end
-				if (args.Message:find("You have gained %d+ Promotion point") ~= nil) then					
-					ebObj.promotionPoint = ebObj.promotionPoint + string.match(args.Message, "%d+");
-					bottomLine:SetBackColor(Turbine.UI.Color(1,0,0));
-					bottomLine:SetText(EBLangData.GainedPromotionPoint .. ebObj.promotionPoint);
-				end					
 			end
 		
+		-- Minas Tirith fix (1/2/16)
+		elseif(ebObj ~= nil and (ebObj.spaceName == "Hammer of the Underworld - Solo/Duo" or ebObj.spaceName == "Hammer of the Underworld - Fellowship")) then
+				-- 3rd phase ending
+			if(args.Message:find(EBLangData.HammerPhase3End) ~= nil) then
+				waveHasEnded();
+			end
+		
+		end
+				
+
+		-- finds side quests when they start (won't need once the logging is no longer needed)
+		--if(args.Message:find("New Quest:") ~= nil) and debuggingMode then
+			--if ebObj ~= nil then
+				--if ebObj.waveInformation[ebObj.currentWave] ~= nil then
+					--ebObj.waveInformation[ebObj.currentWave].sideQuestKillCountStart = ebObj.waveInformation[ebObj.currentWave].killCount;
+					--ebObj.waveInformation[ebObj.currentWave].sideQuestEstKillCountStart = ebObj.waveInformation[ebObj.currentWave].estKillCount;
+					--ebObj.waveInformation[ebObj.currentWave].sideQuestTimeStart = Turbine.Engine:GetGameTime();
+				--end
+			--end
+
+		--end
+	
+	elseif ebObj ~= nil then -- prevents errors when running EBP while not in an EB
+
+		if ebObj.currentWave ~= 0 and (not ebObj.waveInformation[ebObj.currentWave].hasEnded) then
+
 			if args.ChatType == Turbine.ChatType.PlayerCombat then
-				-- check to see if it is an emeny dying
+				-- check to see if it is an emeny dying out on the field
 				local defeatedStartIndex, defeatedEndIndex = args.Message:find(EBLangData.Defeated, 1, true);
 				local defeatedNum = 0;
 				if defeatedStartIndex ~= nil then
@@ -176,7 +224,7 @@ function chatParser(sender, args)
 							ebObj:IncreaseKillCount(ebObj.currentWave, defeatedNum);
 							ebObj:IncreaseEstKillCount(ebObj.currentWave, defeatedNum);
 						end
-
+	
 					elseif(args.Message:find(EBLangData.Commander, defeatedEndIndex, true) ~= nil) then
 						if ebObj.waveInformation[ebObj.currentWave+1] ~= nil then
 							ebObj:IncreaseKillCount(ebObj.currentWave+1, defeatedNum);
@@ -186,29 +234,216 @@ function chatParser(sender, args)
 							ebObj:IncreaseEstKillCount(ebObj.currentWave, defeatedNum);
 						end
 					
-					elseif(args.Message:find(EBLangData.Haradrim, defeatedEndIndex, true) ~= nil) then
+					-- Pel Fix
+					elseif(args.Message:find(EBLangData.CorsairRaider, defeatedEndIndex, true) ~= nil) then
 						if ebObj.waveInformation[ebObj.currentWave+1] ~= nil then
 							ebObj:IncreaseKillCount(ebObj.currentWave+1, defeatedNum);
 							ebObj:IncreaseEstKillCount(ebObj.currentWave+1, defeatedNum);
 						else
 							ebObj:IncreaseKillCount(ebObj.currentWave, defeatedNum);
 							ebObj:IncreaseEstKillCount(ebObj.currentWave, defeatedNum);
-						end	
+						end
 						
-					elseif(args.Message:find(EBLangData.Corsair, defeatedEndIndex, true) ~= nil) then
+					elseif(args.Message:find(EBLangData.HaradrimMarksman, defeatedEndIndex, true) ~= nil) then
 						if ebObj.waveInformation[ebObj.currentWave+1] ~= nil then
 							ebObj:IncreaseKillCount(ebObj.currentWave+1, defeatedNum);
 							ebObj:IncreaseEstKillCount(ebObj.currentWave+1, defeatedNum);
 						else
 							ebObj:IncreaseKillCount(ebObj.currentWave, defeatedNum);
 							ebObj:IncreaseEstKillCount(ebObj.currentWave, defeatedNum);
-						end					
-																		
+						end
+					
+					elseif(args.Message:find(EBLangData.HaradrimMarauder, defeatedEndIndex, true) ~= nil) then
+						if ebObj.waveInformation[ebObj.currentWave+1] ~= nil then
+							ebObj:IncreaseKillCount(ebObj.currentWave+1, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave+1, defeatedNum);
+						else
+							ebObj:IncreaseKillCount(ebObj.currentWave, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave, defeatedNum);
+						end
+						
+					elseif(args.Message:find(EBLangData.HalftrollCrusher, defeatedEndIndex) ~= nil) then
+						if ebObj.waveInformation[ebObj.currentWave+1] ~= nil then
+							ebObj:IncreaseKillCount(ebObj.currentWave+1, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave+1, defeatedNum);
+						else
+							ebObj:IncreaseKillCount(ebObj.currentWave, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave, defeatedNum);
+						end
+						
+					elseif(args.Message:find(EBLangData.CorsairCaptain, defeatedEndIndex, true) ~= nil) then
+						if ebObj.waveInformation[ebObj.currentWave+1] ~= nil then
+							ebObj:IncreaseKillCount(ebObj.currentWave+1, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave+1, defeatedNum);
+						else
+							ebObj:IncreaseKillCount(ebObj.currentWave, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave, defeatedNum);
+						end
+						
+					elseif(args.Message:find(EBLangData.HaradrimSorcerer, defeatedEndIndex, true) ~= nil) then
+						if ebObj.waveInformation[ebObj.currentWave+1] ~= nil then
+							ebObj:IncreaseKillCount(ebObj.currentWave+1, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave+1, defeatedNum);
+						else
+							ebObj:IncreaseKillCount(ebObj.currentWave, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave, defeatedNum);
+						end
+					
+					-- Minas Tirith fix (1/2/16)
+					elseif(args.Message:find(EBLangData.SuhalarReaver, defeatedEndIndex) ~= nil) then
+						if ebObj.waveInformation[ebObj.currentWave+1] ~= nil then
+							ebObj:IncreaseKillCount(ebObj.currentWave+1, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave+1, defeatedNum);
+						else
+							ebObj:IncreaseKillCount(ebObj.currentWave, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave, defeatedNum);
+						end
+					elseif(args.Message:find(EBLangData.SuhalarAxeThrower, defeatedEndIndex) ~= nil) then
+						if ebObj.waveInformation[ebObj.currentWave+1] ~= nil then
+							ebObj:IncreaseKillCount(ebObj.currentWave+1, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave+1, defeatedNum);
+						else
+							ebObj:IncreaseKillCount(ebObj.currentWave, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave, defeatedNum);
+						end
+					elseif(args.Message:find(EBLangData.SuhalarShieldsman, defeatedEndIndex) ~= nil) then
+						if ebObj.waveInformation[ebObj.currentWave+1] ~= nil then
+							ebObj:IncreaseKillCount(ebObj.currentWave+1, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave+1, defeatedNum);
+						else
+							ebObj:IncreaseKillCount(ebObj.currentWave, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave, defeatedNum);
+						end
+					elseif(args.Message:find(EBLangData.SuhalarBladeMaster, defeatedEndIndex) ~= nil) then
+						if ebObj.waveInformation[ebObj.currentWave+1] ~= nil then
+							ebObj:IncreaseKillCount(ebObj.currentWave+1, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave+1, defeatedNum);
+						else
+							ebObj:IncreaseKillCount(ebObj.currentWave, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave, defeatedNum);
+						end
+					elseif(args.Message:find(EBLangData.MordorSoldier, defeatedEndIndex, true) ~= nil) then
+						if ebObj.waveInformation[ebObj.currentWave+1] ~= nil then
+							ebObj:IncreaseKillCount(ebObj.currentWave+1, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave+1, defeatedNum);
+						else
+							ebObj:IncreaseKillCount(ebObj.currentWave, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave, defeatedNum);
+						end
+					elseif(args.Message:find(EBLangData.MordorDefiler, defeatedEndIndex, true) ~= nil) then
+						if ebObj.waveInformation[ebObj.currentWave+1] ~= nil then
+							ebObj:IncreaseKillCount(ebObj.currentWave+1, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave+1, defeatedNum);
+						else
+							ebObj:IncreaseKillCount(ebObj.currentWave, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave, defeatedNum);
+						end
+					elseif(args.Message:find(EBLangData.MordorWarrior, defeatedEndIndex, true) ~= nil) then
+						if ebObj.waveInformation[ebObj.currentWave+1] ~= nil then
+							ebObj:IncreaseKillCount(ebObj.currentWave+1, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave+1, defeatedNum);
+						else
+							ebObj:IncreaseKillCount(ebObj.currentWave, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave, defeatedNum);
+						end
+					elseif(args.Message:find(EBLangData.MordorDrudge, defeatedEndIndex, true) ~= nil) then
+						if ebObj.waveInformation[ebObj.currentWave+1] ~= nil then
+							ebObj:IncreaseKillCount(ebObj.currentWave+1, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave+1, defeatedNum);
+						else
+							ebObj:IncreaseKillCount(ebObj.currentWave, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave, defeatedNum);
+						end
+					elseif(args.Message:find(EBLangData.MordorWarleader, defeatedEndIndex, true) ~= nil) then
+						if ebObj.waveInformation[ebObj.currentWave+1] ~= nil then
+							ebObj:IncreaseKillCount(ebObj.currentWave+1, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave+1, defeatedNum);
+						else
+							ebObj:IncreaseKillCount(ebObj.currentWave, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave, defeatedNum);
+						end
+					elseif(args.Message:find(EBLangData.MorgulArcher, defeatedEndIndex, true) ~= nil) then
+						if ebObj.waveInformation[ebObj.currentWave+1] ~= nil then
+							ebObj:IncreaseKillCount(ebObj.currentWave+1, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave+1, defeatedNum);
+						else
+							ebObj:IncreaseKillCount(ebObj.currentWave, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave, defeatedNum);
+						end
+					elseif(args.Message:find(EBLangData.MorgulCaptain, defeatedEndIndex, true) ~= nil) then
+						if ebObj.waveInformation[ebObj.currentWave+1] ~= nil then
+							ebObj:IncreaseKillCount(ebObj.currentWave+1, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave+1, defeatedNum);
+						else
+							ebObj:IncreaseKillCount(ebObj.currentWave, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave, defeatedNum);
+						end
+					elseif(args.Message:find(EBLangData.MorgulRunner, defeatedEndIndex, true) ~= nil) then
+						if ebObj.waveInformation[ebObj.currentWave+1] ~= nil then
+							ebObj:IncreaseKillCount(ebObj.currentWave+1, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave+1, defeatedNum);
+						else
+							ebObj:IncreaseKillCount(ebObj.currentWave, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave, defeatedNum);
+						end
+					elseif(args.Message:find(EBLangData.MorgulBerserker, defeatedEndIndex, true) ~= nil) then
+						if ebObj.waveInformation[ebObj.currentWave+1] ~= nil then
+							ebObj:IncreaseKillCount(ebObj.currentWave+1, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave+1, defeatedNum);
+						else
+							ebObj:IncreaseKillCount(ebObj.currentWave, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave, defeatedNum);
+						end
+					elseif(args.Message:find(EBLangData.HaradrimSpearman, defeatedEndIndex, true) ~= nil) then
+						if ebObj.waveInformation[ebObj.currentWave+1] ~= nil then
+							ebObj:IncreaseKillCount(ebObj.currentWave+1, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave+1, defeatedNum);
+						else
+							ebObj:IncreaseKillCount(ebObj.currentWave, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave, defeatedNum);
+						end
+					elseif(args.Message:find(EBLangData.HaradrimWarmaster, defeatedEndIndex) ~= nil) then
+						if ebObj.waveInformation[ebObj.currentWave+1] ~= nil then
+							ebObj:IncreaseKillCount(ebObj.currentWave+1, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave+1, defeatedNum);
+						else
+							ebObj:IncreaseKillCount(ebObj.currentWave, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave, defeatedNum);
+						end
+					elseif(args.Message:find(EBLangData.HaradrimArcher, defeatedEndIndex, true) ~= nil) then
+						if ebObj.waveInformation[ebObj.currentWave+1] ~= nil then
+							ebObj:IncreaseKillCount(ebObj.currentWave+1, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave+1, defeatedNum);
+						else
+							ebObj:IncreaseKillCount(ebObj.currentWave, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave, defeatedNum);
+						end
+					elseif(args.Message:find(EBLangData.HalftrollSlayer, defeatedEndIndex) ~= nil) then
+						if ebObj.waveInformation[ebObj.currentWave+1] ~= nil then
+							ebObj:IncreaseKillCount(ebObj.currentWave+1, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave+1, defeatedNum);
+						else
+							ebObj:IncreaseKillCount(ebObj.currentWave, defeatedNum);
+							ebObj:IncreaseEstKillCount(ebObj.currentWave, defeatedNum);
+						end
+					-- end Minas Tirith mobs
+					
 					end
 					updateUI();
 				end
 
 				-- check to see if the player placed a trap
+				local trapStartIndex, trapEndIndex = args.Message:find(EBLangData.TrapCombatChat, 1, false);
+				if trapEndIndex ~= nil then
+					if args.Message:find(EBLangData.BearTrap, 1, true) then
+						table.insert(trapsTable, TrapObject(EBLangData.BearTrap, Turbine.Engine:GetGameTime()));
+					elseif args.Message:find(EBLangData.Tripwire, 1, true) then
+						table.insert(trapsTable, TrapObject(EBLangData.Tripwire, Turbine.Engine:GetGameTime()));
+					else
+						table.insert(trapsTable, TrapObject(EBLangData.Caltrop, Turbine.Engine:GetGameTime()));
+					end
+					updateUI();
+				end
 
 			---[[ This section will no longer be needed once logging is no longer needed
 			elseif args.ChatType == Turbine.ChatType.Death and debuggingMode then
@@ -221,7 +456,7 @@ function chatParser(sender, args)
 					elseif(args.Message:find("Berserker", defeatedEndIndex, true) ~= nil) then
 						ebObj:IncreaseKillCount(ebObj.currentWave, 1);
 						setDelayTime();
-
+	
 					elseif(args.Message:find("Archer", defeatedEndIndex, true) ~= nil) then
 						ebObj:IncreaseKillCount(ebObj.currentWave, 1);
 						setDelayTime();
@@ -234,13 +469,83 @@ function chatParser(sender, args)
 						ebObj:IncreaseKillCount(ebObj.currentWave, 1);
 						setDelayTime();
 						
-					elseif(args.Message:find("Haradrim", defeatedEndIndex, true) ~= nil) then
+					elseif(args.Message:find("Corsair Raider", defeatedEndIndex, true) ~= nil) then
 						ebObj:IncreaseKillCount(ebObj.currentWave, 1);
-						setDelayTime();					
+						setDelayTime();
+						
+					elseif(args.Message:find("Haradrim Marksman", defeatedEndIndex, true) ~= nil) then
+						ebObj:IncreaseKillCount(ebObj.currentWave, 1);
+						setDelayTime();
+						
+					elseif(args.Message:find("Haradrim Marauder", defeatedEndIndex, true) ~= nil) then
+						ebObj:IncreaseKillCount(ebObj.currentWave, 1);
+						setDelayTime();
+						
+					elseif(args.Message:find("Half%-troll Crusher", defeatedEndIndex) ~= nil) then
+						ebObj:IncreaseKillCount(ebObj.currentWave, 1);
+						setDelayTime();
+						
+					elseif(args.Message:find("Corsair Captain", defeatedEndIndex, true) ~= nil) then
+						ebObj:IncreaseKillCount(ebObj.currentWave, 1);
+						setDelayTime();
+						
+					elseif(args.Message:find("Haradrim Sorcerer", defeatedEndIndex, true) ~= nil) then
+						ebObj:IncreaseKillCount(ebObj.currentWave, 1);
+						setDelayTime();
+						
+					-- Minas Tirith fix (1/2/16)
+					elseif(args.Message:find("S.-halar Reaver", defeatedEndIndex) ~= nil) then
+						ebObj:IncreaseKillCount(ebObj.currentWave, 1);
+						setDelayTime();
+					elseif(args.Message:find("S.-halar Axe.Thrower", defeatedEndIndex) ~= nil) then
+						ebObj:IncreaseKillCount(ebObj.currentWave, 1);
+						setDelayTime();
+					elseif(args.Message:find("S.-halar Shieldsman", defeatedEndIndex) ~= nil) then
+						ebObj:IncreaseKillCount(ebObj.currentWave, 1);
+						setDelayTime();
+					elseif(args.Message:find("S.-halar Blade.master", defeatedEndIndex) ~= nil) then
+						ebObj:IncreaseKillCount(ebObj.currentWave, 1);
+						setDelayTime();
+					elseif(args.Message:find("Mordor Solider", defeatedEndIndex, true) ~= nil) then
+						ebObj:IncreaseKillCount(ebObj.currentWave, 1);
+						setDelayTime();
+					elseif(args.Message:find("Mordor Defiler", defeatedEndIndex, true) ~= nil) then
+						ebObj:IncreaseKillCount(ebObj.currentWave, 1);
+						setDelayTime();
+					elseif(args.Message:find("Mordor Warrior", defeatedEndIndex, true) ~= nil) then
+						ebObj:IncreaseKillCount(ebObj.currentWave, 1);
+						setDelayTime();
+					elseif(args.Message:find("Mordor Drudge", defeatedEndIndex, true) ~= nil) then
+						ebObj:IncreaseKillCount(ebObj.currentWave, 1);
+						setDelayTime();
+					elseif(args.Message:find("Mordor Warleader", defeatedEndIndex, true) ~= nil) then
+						ebObj:IncreaseKillCount(ebObj.currentWave, 1);
+						setDelayTime();
+					elseif(args.Message:find("Morgul Archer", defeatedEndIndex, true) ~= nil) then
+						ebObj:IncreaseKillCount(ebObj.currentWave, 1);
+						setDelayTime();
+					elseif(args.Message:find("Morgul Captain", defeatedEndIndex, true) ~= nil) then
+						ebObj:IncreaseKillCount(ebObj.currentWave, 1);
+						setDelayTime();
+					elseif(args.Message:find("Morgul Runner", defeatedEndIndex, true) ~= nil) then
+						ebObj:IncreaseKillCount(ebObj.currentWave, 1);
+						setDelayTime();
+					elseif(args.Message:find("Morgul Berserker", defeatedEndIndex, true) ~= nil) then
+						ebObj:IncreaseKillCount(ebObj.currentWave, 1);
+						setDelayTime();
+					elseif(args.Message:find("Haradrim Spearman", defeatedEndIndex, true) ~= nil) then
+						ebObj:IncreaseKillCount(ebObj.currentWave, 1);
+						setDelayTime();
+					elseif(args.Message:find("Haradrim War.master", defeatedEndIndex) ~= nil) then
+						ebObj:IncreaseKillCount(ebObj.currentWave, 1);
+						setDelayTime();
+					elseif(args.Message:find("Haradrim Archer", defeatedEndIndex, true) ~= nil) then
+						ebObj:IncreaseKillCount(ebObj.currentWave, 1);
+						setDelayTime();
+					elseif(args.Message:find("Half.troll Slayer", defeatedEndIndex) ~= nil) then
+						ebObj:IncreaseKillCount(ebObj.currentWave, 1);
+						setDelayTime();
 					
-					elseif(args.Message:find("Corsair", defeatedEndIndex, true) ~= nil) then
-						ebObj:IncreaseKillCount(ebObj.currentWave, 1);
-						setDelayTime();					
 					end
 					updateUI();
 				end--]]--
@@ -260,7 +565,7 @@ function chatParser(sender, args)
 					waveHasStarted("Western");
 				elseif(args.Message:find(EBLangData.HDCentre, 1, true) ~= nil) then
 					waveHasStarted("Centre");
-
+			
 				-- 1st/2nd waves ending
 				elseif(args.Message:find(EBLangData.HDWaveEnding1, 1, true) ~= nil) then
 					waveHasEnded();
@@ -300,7 +605,7 @@ function chatParser(sender, args)
 				elseif(args.Message:find(EBLangData.DWWaveEnding2, 1, true) ~= nil) then
 					waveHasEnded();
 				end
-
+			
 			elseif ebObj.spaceName == "Deeping Wall - Raid" then
 				-- waves starting
 				if(args.Message:find(EBLangData.EasternWall, 1, true) ~= nil) then
@@ -340,15 +645,88 @@ function chatParser(sender, args)
 				-- 1st/2nd wave ending
 				elseif(args.Message:find(EBLangData.HBWaveEnding, 1, true) ~= nil) then
 					waveHasEnded();
-				end		
+				end
+				
+			elseif ebObj.spaceName == "Retaking Pelargir - Solo/Duo" or ebObj.spaceName == "Retaking Pelargir - Fellowship" then
+				-- 1st phase starting
+				if(args.Message:find(EBLangData.PelPhase1Start, 1, true) ~= nil) then
+					waveHasStarted("Phase 1");
+				
+				-- 2nd phase starting
+				elseif(args.Message:find(EBLangData.PelPhase2Start, 1, true) ~= nil) then
+					waveHasStarted("Phase 2");
+					
+				-- 3rd phase starting
+				elseif(args.Message:find(EBLangData.PelPhase3Start, 1, true) ~= nil) then
+					waveHasStarted("Phase 3");
+
+				-- 1st phase ending
+				elseif(args.Message:find(EBLangData.PelPhase1End, 1, true) ~= nil) then
+					waveHasEnded();
+				
+				-- 2nd phase ending
+				elseif(args.Message:find(EBLangData.PelPhase2End, 1, true) ~= nil) then
+					waveHasEnded();
+					
+				-- 3rd phase ending
+				elseif(args.Message:find(EBLangData.PelPhase3End, 1, true) ~= nil) then
+					waveHasEnded();
+				
+				-- check to see if the secondary epic foes are starting
+				elseif ebObj.waveInformation[ebObj.currentWave] ~= nil and EpicBattleData[ebObj.spaceName].sides[ebObj.waveInformation[ebObj.currentWave].side].wave[ebObj.currentWave].secondary ~= nil then
+					if args.Message:find(EpicBattleData[ebObj.spaceName].sides[ebObj.waveInformation[ebObj.currentWave].side].wave[ebObj.currentWave].secondaryCallout) ~= nil then
+						ebObj.waveInformation[ebObj.currentWave].killEndTime = Turbine.Engine:GetGameTime() + EpicBattleData[ebObj.spaceName].sides[ebObj.waveInformation[ebObj.currentWave].side].wave[ebObj.currentWave].secondaryTimeToKill;
+						ebObj.waveInformation[ebObj.currentWave].isEpicFoe = 3;
+						ebObj.waveInformation[ebObj.currentWave].foeName = EpicBattleData[ebObj.spaceName].sides[ebObj.waveInformation[ebObj.currentWave].side].wave[ebObj.currentWave].secondary;
+						ebObj.waveInformation[ebObj.currentWave].part = 3;
+						
+						-- if we're debugging stuff, add the start time of the secondary foe
+							if debuggingMode then
+								ebObj.waveInformation[ebObj.currentWave].foeKillCountStart = ebObj.waveInformation[ebObj.currentWave].killCount;
+								ebObj.waveInformation[ebObj.currentWave].foeEstKillCountStart = ebObj.waveInformation[ebObj.currentWave].estKillCount;
+								ebObj.waveInformation[ebObj.currentWave].foeTimeStart = Turbine.Engine:GetGameTime();
+							end
+					end
+				end
+				
+			-- Minas Tirith fix (1/2/16)
+			elseif ebObj.spaceName == "Hammer of the Underworld - Solo/Duo" or ebObj.spaceName == "Hammer of the Underworld - Fellowship" then
+				-- 1st phase starting
+				if(args.Message:find(EBLangData.HammerPhase1Start, 1, true) ~= nil) then
+					waveHasStarted("Phase 1");
+
+				-- 1st phase ending (and 2nd phase starting)
+				elseif(args.Message:find(EBLangData.HammerPhase1End, 1, true) ~= nil) then
+					waveHasEnded();
+					waveHasStarted("Phase 2");
+				
+				-- 2nd phase ending (and 3rd phase starting)
+				elseif(args.Message:find(EBLangData.HammerPhase2End, 1, true) ~= nil) then
+					waveHasEnded();
+					waveHasStarted("Phase 3");
+					
+				-- 3rd phase ending
+				elseif(args.Message:find(EBLangData.HammerPhase3End, 1, true) ~= nil) then
+					waveHasEnded();
+				end
+				
+			elseif ebObj.spaceName == "The Defence of Minas Tirith - Solo/Duo" or ebObj.spaceName == "The Defence of Minas Tirith - Small Fellowship" then
+				-- 1st phase starting
+				if(args.Message:find(EBLangData.DefencePhase1Start, 1, true) ~= nil) then
+					waveHasStarted("Phase 1");
+
+				-- 1st phase ending (and 2nd phase starting)
+				elseif(args.Message:find(EBLangData.DefencePhase1End, 1, true) ~= nil) then
+					waveHasEnded();
+					waveHasStarted("Phase 2");
+				
+				-- 2nd phase ending
+				elseif(args.Message:find(EBLangData.DefencePhase2End, 1, true) ~= nil) then
+					waveHasEnded();
+					
+				end
 			
-			elseif ebObj.spaceName == "Retaking Pelargir - Solo/Duo" then
-				-- Start the first wave before it because the traps counter
-				if(args.Message:find(EBLangData.RPStart1, 1, true) ~= nil) then
-					waveHasStarted("Only");
-				end								
-			end			
-			
+			end
 		elseif args.ChatType == Turbine.ChatType.Standard then
 			if args.Message:find(EBLangData.EnteredChatChannel) then
 				ebObj = nil;
@@ -368,12 +746,15 @@ AddCallback(Turbine.Chat, "Received", chatParser);
 
 -- function that sets up the EpicBattleSpace obj
 function setUpEBObj(spaceName)
+	if confirmHDSizeWindow ~= nil then
+		confirmHDSizeWindow:SetVisible(false);
+		confirmHDSizeWindow = nil;
+	end
+
 	if debuggingMode and pastEpicBattles == nil then
 		pastEpicBattles = {};
 	end
 	ebObj = EpicBattleSpace(spaceName);
-	QuestDetailData = {};
-
 	if debuggingMode then table.insert(pastEpicBattles, ebObj); end
 	if OptionWindow.maxForBattleToggle:IsChecked() and winIsMin then
 		scaleMainWindow(OptionWindow.scaleScrollbar:GetValue());
@@ -391,9 +772,6 @@ function waveHasStarted(sideName)
 	elseif ebObj.waveInformation[ebObj.currentWave].hasEnded then
 		ebObj.currentWave = ebObj.currentWave + 1;
 	end
-	if ebObj.spaceName == "Deeping Wall - Raid" then
-		ebObj.DWRaidMatrix[ebObj.waveInformation[ebObj.currentWave].side] = 0;
-	end;
 	updateUI();
 end
 

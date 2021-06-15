@@ -5,12 +5,13 @@ GLocale = Turbine.Engine.GetLanguage();
 if GLocale == 268435460 then 
 	GLocale = "de";
 	import "SDRPlugins.EpicBattlePlugin.Language_de";
---  elseif GLocale == 268435459 then GLocale = "fr";
+elseif GLocale == 268435459 then
+	GLocale = "fr";
+	import "SDRPlugins.EpicBattlePlugin.Language_fr";
 --  elseif GLocale == 268435463 then GLocale = "ru";
 else
 	GLocale = "en";
 	import "SDRPlugins.EpicBattlePlugin.Language_en";
-	import "SDRPlugins.EpicBattlePlugin.Language_ext_en";
 end
 
 import "SDRPlugins.EpicBattlePlugin.Class";
@@ -37,23 +38,7 @@ import "SDRPlugins.EpicBattlePlugin.VindarPatch";
 --STANDARD_KILL_TIME_RATIO = 0; -- usually it seems most instances have a kill/time ratio of 0.5 as a basic start
 --STANDARD_DELAY = 120; -- most instances have about 2 minutes between wave starting and the mobs arriving
 
-
-ChatData = {};
-ChatData.chat = "/RA";
-ChatData.wave = 0;
-ChatData.detail = 1;
-ChatData.language = "hu";
-
-QuestDetailData = {};
-QuestRewardData = {};
-RandomQuestData = {};
-
-QuestRewardData[1] = "reward_bronze.tga";
-QuestRewardData[2] = "reward_silver.tga";
-QuestRewardData[3] = "reward_gold.tga";
-QuestRewardData[4] = "reward_platinum.tga";
-
-EpicBattleData = {};
+EpicBattleData = {}
 
 -- Information for Helm's Dike Solo
 EpicBattleData["Helm's Dike - Solo/Duo"] = {};
@@ -368,6 +353,7 @@ EpicBattleData["Glittering Caves - Small Fellowship"].sides["Eastern"].wave[2].k
 EpicBattleData["Glittering Caves - Small Fellowship"].sides["Eastern"].wave[2].delay = 89;
 EpicBattleData["Glittering Caves - Small Fellowship"].sides["Eastern"].wave[2].nextSide = "Centre";
 EpicBattleData["Glittering Caves - Small Fellowship"].sides["Eastern"].wave[2][1] = "Spider Assault";
+
 EpicBattleData["Glittering Caves - Small Fellowship"].sides["Centre"] = {};
 EpicBattleData["Glittering Caves - Small Fellowship"].sides["Centre"].wave = {}; -- will store the information for each wave of the instance
 EpicBattleData["Glittering Caves - Small Fellowship"].sides["Centre"].wave[3] = {}; -- indicates wave 3 on this side
@@ -391,7 +377,7 @@ EpicBattleData["The Hornburg - Solo/Duo"].sides["Only"].wave[1].maxTime = 660;
 EpicBattleData["The Hornburg - Solo/Duo"].sides["Only"].wave[1].killCount = 127;
 EpicBattleData["The Hornburg - Solo/Duo"].sides["Only"].wave[1].nextSide = "Only";
 EpicBattleData["The Hornburg - Solo/Duo"].sides["Only"].wave[1].delay = 106;
-EpicBattleData["The Hornburg - Solo/Duo"].sides["Only"].wave[1][1] = "Bring Down the Siege Ladders";
+EpicBattleData["The Hornburg - Solo/Duo"].sides["Only"].wave[1][1] = "Bringing Down the Siege Ladders";
 EpicBattleData["The Hornburg - Solo/Duo"].sides["Only"].wave[1][2] = "Repair the Portcullis";
 EpicBattleData["The Hornburg - Solo/Duo"].sides["Only"].wave[2] = {}; -- indicates wave 2 on this side
 EpicBattleData["The Hornburg - Solo/Duo"].sides["Only"].wave[2].killTimeRatio = 0.75;
@@ -402,36 +388,289 @@ EpicBattleData["The Hornburg - Solo/Duo"].sides["Only"].wave[2][1] = "Protecting
 EpicBattleData["The Hornburg - Solo/Duo"].sides["Only"].wave[2][2] = "Winches in the Windows";
 EpicBattleData["The Hornburg - Solo/Duo"].sides["Only"].wave[2][3] = "The Final Blockade";
 
-
--- Pelangir
-
--- Information for Retaking Pelargir
+-- Information for Pelargir - Solo
 EpicBattleData["Retaking Pelargir - Solo/Duo"] = {};
 EpicBattleData["Retaking Pelargir - Solo/Duo"].waves = 3;
 EpicBattleData["Retaking Pelargir - Solo/Duo"].sides = {}; -- will hold the sides this space has
-EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"] = {};
-EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave = {}; 
-EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[1] = {}; 
-EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[1].killTimeRatio = 0.5;
-EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[1].maxTime = 2000; 
-EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[1].killCount = 10; 
-EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[1].nextSide = "Only"; 
-EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[1].delay = 500; 
-EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[1][1] = "Kang-kethek the Sorcerer";
-EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[1][2] = "Ugturu the Half-troll";
-EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[2] = {};
-EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[2].killTimeRatio = 0.5; 
-EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[2].maxTime = 600; 
-EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[2].killCount = 10; 
-EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[2].nextSide = "Only"; 
-EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[2].delay = 120; 
-EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[2][1] = "Parade of Thieves";
-EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[2][2] = "Backs to the Wall";
-EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[3] = {}; -- indicates wave 3 on this side
-EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[3].killTimeRatio = 0.5; 
-EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[3].maxTime = 600; 
-EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[3].killCount = 10; 
-EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[3].delay = 120; 
-EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[3][1] = "Archer Thisarti";
-EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[3][2] = "Okurayo the Minstrel";
-EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Only"].wave[3][3] = "The Thrice Blown Horn";
+
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 1"] = {};
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 1"].wave = {}; -- will store the information for each wave of the instance
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 1"].wave[1] = {}; -- indicates wave 1 on this side
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 1"].wave[1].killTimeRatio = 0.12;
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 1"].wave[1].maxTime = 365;
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 1"].wave[1].killCount = 41;
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 1"].wave[1].nextSide = "Phase 2";
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 1"].wave[1].delay = 30;
+
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 2"] = {};
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 2"].wave = {}; -- will store the information for each wave of the instance
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 2"].wave[2] = {}; -- indicates wave 2 on this side
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 2"].wave[2].killTimeRatio = 0.25;
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 2"].wave[2].maxTime = 350;
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 2"].wave[2].killCount = 18;
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 2"].wave[2].delay = 40;
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 2"].wave[2].nextSide = "Phase 3";
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 2"].wave[2].epicFoes = {};
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 2"].wave[2].epicFoes.killCount = 45;
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 2"].wave[2].epicFoes[1] = {};
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 2"].wave[2].epicFoes[1].name = "Kang-kethek the Sorcerer";
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 2"].wave[2].epicFoes[1].timeToKill = 45;
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 2"].wave[2].epicFoes[2] = {};
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 2"].wave[2].epicFoes[2].name = "Ugturu the Half-troll";
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 2"].wave[2].epicFoes[2].timeToKill = 60;
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 2"].wave[2].quests = {};
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 2"].wave[2].quests.killCount = 22;
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 2"].wave[2].quests[1] = "Backs to the Wall";
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 2"].wave[2].quests[2] = "Parade of Thieves";
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 2"].wave[2].secondary = "Kisung Teng";
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 2"].wave[2].secondaryCallout = EBLangData.FirstPelFoe;
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 2"].wave[2].secondaryKillCount = 70;
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 2"].wave[2].secondaryTimeToKill = 45;
+
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 3"] = {};
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 3"].wave = {}; -- will store the information for each wave of the instance
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 3"].wave[3] = {}; -- indicates wave 3 on this side
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 3"].wave[3].killTimeRatio = 0.29;
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 3"].wave[3].maxTime = 500;
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 3"].wave[3].killCount = 39;
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 3"].wave[3].delay = 75;
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 3"].wave[3].epicFoes = {};
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 3"].wave[3].epicFoes.killCount = 60;
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 3"].wave[3].epicFoes[1] = {};
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 3"].wave[3].epicFoes[1].name = "Okurayo the Minstrel";
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 3"].wave[3].epicFoes[1].timeToKill = 45;
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 3"].wave[3].epicFoes[2] = {};
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 3"].wave[3].epicFoes[2].name = "Archer Thisarti";
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 3"].wave[3].epicFoes[2].timeToKill = 45;
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 3"].wave[3].secondary = "Zagaroth";
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 3"].wave[3].secondaryCallout = EBLangData.SecondPelFoe;
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 3"].wave[3].secondaryKillCount = 110;
+EpicBattleData["Retaking Pelargir - Solo/Duo"].sides["Phase 3"].wave[3].secondaryTimeToKill = 45;
+
+-- Information for Pelargir - Fellowship
+EpicBattleData["Retaking Pelargir - Fellowship"] = {};
+EpicBattleData["Retaking Pelargir - Fellowship"].waves = 3;
+EpicBattleData["Retaking Pelargir - Fellowship"].sides = {}; -- will hold the sides this space has
+                                    
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 1"] = {};
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 1"].wave = {}; -- will store the information for each wave of the instance
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 1"].wave[1] = {}; -- indicates wave 1 on this side
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 1"].wave[1].killTimeRatio = 0.27;
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 1"].wave[1].maxTime = 270;
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 1"].wave[1].killCount = 65;
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 1"].wave[1].nextSide = "Phase 2";
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 1"].wave[1].delay = 25;
+                                    
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 2"] = {};
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 2"].wave = {}; -- will store the information for each wave of the instance
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 2"].wave[2] = {}; -- indicates wave 2 on this side
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 2"].wave[2].killTimeRatio = 0.34;
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 2"].wave[2].maxTime = 530;
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 2"].wave[2].killCount = 48;
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 2"].wave[2].delay = 35;
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 2"].wave[2].nextSide = "Phase 3";
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 2"].wave[2].epicFoes = {};
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 2"].wave[2].epicFoes.killCount = 100;
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 2"].wave[2].epicFoes[1] = {};
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 2"].wave[2].epicFoes[1].name = "Kang-kethek the Sorcerer";
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 2"].wave[2].epicFoes[1].timeToKill = 45;
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 2"].wave[2].epicFoes[2] = {};
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 2"].wave[2].epicFoes[2].name = "Ugturu the Half-troll";
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 2"].wave[2].epicFoes[2].timeToKill = 60;
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 2"].wave[2].quests = {};
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 2"].wave[2].quests.killCount = 40;
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 2"].wave[2].quests[1] = "Backs to the Wall";
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 2"].wave[2].quests[2] = "Parade of Thieves";
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 2"].wave[2].secondary = "Kisung Teng";
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 2"].wave[2].secondaryKillCount = 165;
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 2"].wave[2].secondaryCallout = EBLangData.FirstPelFoe;
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 2"].wave[2].secondaryTimeToKill = 45;
+                                    
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 3"] = {};
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 3"].wave = {}; -- will store the information for each wave of the instance
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 3"].wave[3] = {}; -- indicates wave 3 on this side
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 3"].wave[3].killTimeRatio = 0.3;
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 3"].wave[3].maxTime = 800;
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 3"].wave[3].killCount = 30;
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 3"].wave[3].delay = 75;
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 3"].wave[3].epicFoes = {};
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 3"].wave[3].epicFoes.killCount = 150;
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 3"].wave[3].epicFoes[1] = {};
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 3"].wave[3].epicFoes[1].name = "Okurayo the Minstrel";
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 3"].wave[3].epicFoes[1].timeToKill = 50;
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 3"].wave[3].epicFoes[2] = {};
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 3"].wave[3].epicFoes[2].name = "Archer Thisarti";
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 3"].wave[3].epicFoes[2].timeToKill = 50;
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 3"].wave[3].quests = {};
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 3"].wave[3].quests.killCount = 65;
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 3"].wave[3].quests[1] = "The Ship-slaves";
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 3"].wave[3].quests[2] = "The Thrice-blown Horn";
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 3"].wave[3].secondary = "Zagaroth";
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 3"].wave[3].secondaryKillCount = 175;
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 3"].wave[3].secondaryCallout = EBLangData.SecondPelFoe;
+EpicBattleData["Retaking Pelargir - Fellowship"].sides["Phase 3"].wave[3].secondaryTimeToKill = 45;
+
+-- Information for The Defence of Minas Tirith - Solo
+EpicBattleData["The Defence of Minas Tirith - Solo/Duo"] = {};
+EpicBattleData["The Defence of Minas Tirith - Solo/Duo"].waves = 2;
+EpicBattleData["The Defence of Minas Tirith - Solo/Duo"].sides = {}; -- will hold the sides this space has
+                                    
+EpicBattleData["The Defence of Minas Tirith - Solo/Duo"].sides["Phase 1"] = {};
+EpicBattleData["The Defence of Minas Tirith - Solo/Duo"].sides["Phase 1"].wave = {}; -- will store the information for each wave of the instance
+EpicBattleData["The Defence of Minas Tirith - Solo/Duo"].sides["Phase 1"].wave[1] = {}; -- indicates wave 1 on this side
+EpicBattleData["The Defence of Minas Tirith - Solo/Duo"].sides["Phase 1"].wave[1].killTimeRatio = 0.33;
+EpicBattleData["The Defence of Minas Tirith - Solo/Duo"].sides["Phase 1"].wave[1].maxTime = 665;
+EpicBattleData["The Defence of Minas Tirith - Solo/Duo"].sides["Phase 1"].wave[1].killCount = 70;
+EpicBattleData["The Defence of Minas Tirith - Solo/Duo"].sides["Phase 1"].wave[1].delay = 104;
+EpicBattleData["The Defence of Minas Tirith - Solo/Duo"].sides["Phase 1"].wave[1].nextSide = "Phase 2";
+EpicBattleData["The Defence of Minas Tirith - Solo/Duo"].sides["Phase 1"].wave[1].epicFoes = {};
+EpicBattleData["The Defence of Minas Tirith - Solo/Duo"].sides["Phase 1"].wave[1].epicFoes["Epic Foe: Raghathai, Faramir's Bane"] = {};
+EpicBattleData["The Defence of Minas Tirith - Solo/Duo"].sides["Phase 1"].wave[1].epicFoes["Epic Foe: Raghathai, Faramir's Bane"].name = "Epic Foe: Raghathai, Faramir's Bane";
+EpicBattleData["The Defence of Minas Tirith - Solo/Duo"].sides["Phase 1"].wave[1].epicFoes["Epic Foe: Raghathai, Faramir's Bane"].timeToKill = 34;
+EpicBattleData["The Defence of Minas Tirith - Solo/Duo"].sides["Phase 1"].wave[1][1] = "Epic Foe: Raghathai, Faramir's Bane";
+EpicBattleData["The Defence of Minas Tirith - Solo/Duo"].sides["Phase 1"].wave[1][2] = "Awash with Flames";
+EpicBattleData["The Defence of Minas Tirith - Solo/Duo"].sides["Phase 1"].wave[1][3] = "Beasts of Harad";
+                                    
+EpicBattleData["The Defence of Minas Tirith - Solo/Duo"].sides["Phase 2"] = {};
+EpicBattleData["The Defence of Minas Tirith - Solo/Duo"].sides["Phase 2"].wave = {}; -- will store the information for each wave of the instance
+EpicBattleData["The Defence of Minas Tirith - Solo/Duo"].sides["Phase 2"].wave[2] = {}; -- indicates wave 2 on this side
+EpicBattleData["The Defence of Minas Tirith - Solo/Duo"].sides["Phase 2"].wave[2].killTimeRatio = 0.48;
+EpicBattleData["The Defence of Minas Tirith - Solo/Duo"].sides["Phase 2"].wave[2].maxTime = 400;
+EpicBattleData["The Defence of Minas Tirith - Solo/Duo"].sides["Phase 2"].wave[2].killCount = 63;
+EpicBattleData["The Defence of Minas Tirith - Solo/Duo"].sides["Phase 2"].wave[2].delay = 90;
+EpicBattleData["The Defence of Minas Tirith - Solo/Duo"].sides["Phase 2"].wave[2].epicFoes = {};
+EpicBattleData["The Defence of Minas Tirith - Solo/Duo"].sides["Phase 2"].wave[2].epicFoes["Epic Foe: Ahartal, Hand of the First Blade"] = {};
+EpicBattleData["The Defence of Minas Tirith - Solo/Duo"].sides["Phase 2"].wave[2].epicFoes["Epic Foe: Ahartal, Hand of the First Blade"].name = "Epic Foe: Ahartal, Hand of the First Blade";
+EpicBattleData["The Defence of Minas Tirith - Solo/Duo"].sides["Phase 2"].wave[2].epicFoes["Epic Foe: Ahartal, Hand of the First Blade"].timeToKill = 34;
+EpicBattleData["The Defence of Minas Tirith - Solo/Duo"].sides["Phase 2"].wave[2][1] = "Epic Foe: Ahartal, Hand of the First Blade";
+EpicBattleData["The Defence of Minas Tirith - Solo/Duo"].sides["Phase 2"].wave[2][2] = "Rain of Death";
+EpicBattleData["The Defence of Minas Tirith - Solo/Duo"].sides["Phase 2"].wave[2][3] = "Despair in the Streets";
+
+-- Information for The Defence of Minas Tirith - Small Fellowship
+EpicBattleData["The Defence of Minas Tirith - Small Fellowship"] = {};
+EpicBattleData["The Defence of Minas Tirith - Small Fellowship"].waves = 2;
+EpicBattleData["The Defence of Minas Tirith - Small Fellowship"].sides = {}; -- will hold the sides this space has
+                                    
+EpicBattleData["The Defence of Minas Tirith - Small Fellowship"].sides["Phase 1"] = {};
+EpicBattleData["The Defence of Minas Tirith - Small Fellowship"].sides["Phase 1"].wave = {}; -- will store the information for each wave of the instance
+EpicBattleData["The Defence of Minas Tirith - Small Fellowship"].sides["Phase 1"].wave[1] = {}; -- indicates wave 1 on this side
+EpicBattleData["The Defence of Minas Tirith - Small Fellowship"].sides["Phase 1"].wave[1].killTimeRatio = 0.33;
+EpicBattleData["The Defence of Minas Tirith - Small Fellowship"].sides["Phase 1"].wave[1].maxTime = 700;
+EpicBattleData["The Defence of Minas Tirith - Small Fellowship"].sides["Phase 1"].wave[1].killCount = 53;
+EpicBattleData["The Defence of Minas Tirith - Small Fellowship"].sides["Phase 1"].wave[1].delay = 104;
+EpicBattleData["The Defence of Minas Tirith - Small Fellowship"].sides["Phase 1"].wave[1].nextSide = "Phase 2";
+EpicBattleData["The Defence of Minas Tirith - Small Fellowship"].sides["Phase 1"].wave[1].epicFoes = {};
+EpicBattleData["The Defence of Minas Tirith - Small Fellowship"].sides["Phase 1"].wave[1].epicFoes["Epic Foe: Raghathai, Faramir's Bane"] = {};
+EpicBattleData["The Defence of Minas Tirith - Small Fellowship"].sides["Phase 1"].wave[1].epicFoes["Epic Foe: Raghathai, Faramir's Bane"].name = "Epic Foe: Raghathai, Faramir's Bane";
+EpicBattleData["The Defence of Minas Tirith - Small Fellowship"].sides["Phase 1"].wave[1].epicFoes["Epic Foe: Raghathai, Faramir's Bane"].timeToKill = 34;
+EpicBattleData["The Defence of Minas Tirith - Small Fellowship"].sides["Phase 1"].wave[1][1] = "Epic Foe: Raghathai, Faramir's Bane";
+EpicBattleData["The Defence of Minas Tirith - Small Fellowship"].sides["Phase 1"].wave[1][2] = "Awash with Flames";
+EpicBattleData["The Defence of Minas Tirith - Small Fellowship"].sides["Phase 1"].wave[1][3] = "Beasts of Harad";
+                                    
+EpicBattleData["The Defence of Minas Tirith - Small Fellowship"].sides["Phase 2"] = {};
+EpicBattleData["The Defence of Minas Tirith - Small Fellowship"].sides["Phase 2"].wave = {}; -- will store the information for each wave of the instance
+EpicBattleData["The Defence of Minas Tirith - Small Fellowship"].sides["Phase 2"].wave[2] = {}; -- indicates wave 2 on this side
+EpicBattleData["The Defence of Minas Tirith - Small Fellowship"].sides["Phase 2"].wave[2].killTimeRatio = 0.52;
+EpicBattleData["The Defence of Minas Tirith - Small Fellowship"].sides["Phase 2"].wave[2].maxTime = 620;
+EpicBattleData["The Defence of Minas Tirith - Small Fellowship"].sides["Phase 2"].wave[2].killCount = 75;
+EpicBattleData["The Defence of Minas Tirith - Small Fellowship"].sides["Phase 2"].wave[2].delay = 90;
+EpicBattleData["The Defence of Minas Tirith - Small Fellowship"].sides["Phase 2"].wave[2].epicFoes = {};
+EpicBattleData["The Defence of Minas Tirith - Small Fellowship"].sides["Phase 2"].wave[2].epicFoes["Epic Foe: Ahartal, Hand of the First Blade"] = {};
+EpicBattleData["The Defence of Minas Tirith - Small Fellowship"].sides["Phase 2"].wave[2].epicFoes["Epic Foe: Ahartal, Hand of the First Blade"].name = "Epic Foe: Ahartal, Hand of the First Blade";
+EpicBattleData["The Defence of Minas Tirith - Small Fellowship"].sides["Phase 2"].wave[2].epicFoes["Epic Foe: Ahartal, Hand of the First Blade"].timeToKill = 34;
+EpicBattleData["The Defence of Minas Tirith - Small Fellowship"].sides["Phase 2"].wave[2][1] = "Epic Foe: Ahartal, Hand of the First Blade";
+EpicBattleData["The Defence of Minas Tirith - Small Fellowship"].sides["Phase 2"].wave[2][2] = "Rain of Death";
+EpicBattleData["The Defence of Minas Tirith - Small Fellowship"].sides["Phase 2"].wave[2][3] = "Despair in the Streets";
+
+-- Information for Hammer of the Underworld - Solo
+EpicBattleData["Hammer of the Underworld - Solo/Duo"] = {};
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].waves = 3;
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides = {}; -- will hold the sides this space has
+                                    
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 1"] = {};
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 1"].wave = {}; -- will store the information for each wave of the instance
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 1"].wave[1] = {}; -- indicates wave 1 on this side
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 1"].wave[1].killTimeRatio = 0.45;
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 1"].wave[1].maxTime = 650;
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 1"].wave[1].killCount = 65;
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 1"].wave[1].delay = 135;
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 1"].wave[1].nextSide = "Phase 2";
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 1"].wave[1].epicFoes = {};
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 1"].wave[1].epicFoes["Epic Foe: Ughash the Unslakable"] = {};
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 1"].wave[1].epicFoes["Epic Foe: Ughash the Unslakable"].name = "Epic Foe: Ughash the Unslakable";
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 1"].wave[1].epicFoes["Epic Foe: Ughash the Unslakable"].timeToKill = 34;
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 1"].wave[1][1] = "Epic Foe: Ughash the Unslakable";
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 1"].wave[1][2] = "Drums of War";
+                                    
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 2"] = {};
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 2"].wave = {}; -- will store the information for each wave of the instance
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 2"].wave[2] = {}; -- indicates wave 2 on this side
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 2"].wave[2].killTimeRatio = 0.44;
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 2"].wave[2].maxTime = 570;
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 2"].wave[2].killCount = 70;
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 2"].wave[2].delay = 78;
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 2"].wave[2].nextSide = "Phase 3";
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 2"].wave[2].epicFoes = {};
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 2"].wave[2].epicFoes["Epic Foe: Masorgh, Cleaver of Heads"] = {};
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 2"].wave[2].epicFoes["Epic Foe: Masorgh, Cleaver of Heads"].name = "Epic Foe: Masorgh, Cleaver of Heads";
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 2"].wave[2].epicFoes["Epic Foe: Masorgh, Cleaver of Heads"].timeToKill = 34;
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 2"].wave[2][1] = "Epic Foe: Masorgh, Cleaver of Heads";
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 2"].wave[2][2] = "A Brutal Reversal";
+                                    
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 3"] = {};
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 3"].wave = {}; -- will store the information for each wave of the instance
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 3"].wave[3] = {}; -- indicates wave 3 on this side
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 3"].wave[3].killTimeRatio = 0.4;
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 3"].wave[3].maxTime = 645;
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 3"].wave[3].killCount = 60;
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 3"].wave[3].delay = 38;
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 3"].wave[3].epicFoes = {};
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 3"].wave[3][1] = "Broken by Fear";
+EpicBattleData["Hammer of the Underworld - Solo/Duo"].sides["Phase 3"].wave[3][2] = "On Black Wings";
+
+-- Information for Hammer of the Underworld - Fellowship
+EpicBattleData["Hammer of the Underworld - Fellowship"] = {};
+EpicBattleData["Hammer of the Underworld - Fellowship"].waves = 3;
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides = {}; -- will hold the sides this space has
+                                    
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 1"] = {};
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 1"].wave = {}; -- will store the information for each wave of the instance
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 1"].wave[1] = {}; -- indicates wave 1 on this side
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 1"].wave[1].killTimeRatio = 0.46;
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 1"].wave[1].maxTime = 734;
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 1"].wave[1].killCount = 78;
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 1"].wave[1].delay = 130;
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 1"].wave[1].nextSide = "Phase 2";
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 1"].wave[1].epicFoes = {};
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 1"].wave[1].epicFoes["Epic Foe: Ughash the Unslakable"] = {};
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 1"].wave[1].epicFoes["Epic Foe: Ughash the Unslakable"].name = "Epic Foe: Ughash the Unslakable";
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 1"].wave[1].epicFoes["Epic Foe: Ughash the Unslakable"].timeToKill = 34;
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 1"].wave[1][1] = "Epic Foe: Ughash the Unslakable";
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 1"].wave[1][2] = "Drums of War";
+                                    
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 2"] = {};
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 2"].wave = {}; -- will store the information for each wave of the instance
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 2"].wave[2] = {}; -- indicates wave 2 on this side
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 2"].wave[2].killTimeRatio = 0.46;
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 2"].wave[2].maxTime = 710;
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 2"].wave[2].killCount = 76;
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 2"].wave[2].delay = 89;
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 2"].wave[2].nextSide = "Phase 3";
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 2"].wave[2].epicFoes = {};
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 2"].wave[2].epicFoes["Epic Foe: Masorgh, Cleaver of Heads"] = {};
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 2"].wave[2].epicFoes["Epic Foe: Masorgh, Cleaver of Heads"].name = "Epic Foe: Masorgh, Cleaver of Heads";
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 2"].wave[2].epicFoes["Epic Foe: Masorgh, Cleaver of Heads"].timeToKill = 34;
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 2"].wave[2][1] = "Epic Foe: Masorgh, Cleaver of Heads";
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 2"].wave[2][2] = "A Brutal Reversal";
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 2"].wave[2][3] = "Up From the Depths";
+                                    
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 3"] = {};
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 3"].wave = {}; -- will store the information for each wave of the instance
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 3"].wave[3] = {}; -- indicates wave 3 on this side
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 3"].wave[3].killTimeRatio = 0.47;
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 3"].wave[3].maxTime = 900;
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 3"].wave[3].killCount = 75;
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 3"].wave[3].delay = 50;
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 3"].wave[3].epicFoes = {};
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 3"].wave[3][1] = "Broken by Fear";
+EpicBattleData["Hammer of the Underworld - Fellowship"].sides["Phase 3"].wave[3][2] = "On Black Wings";
